@@ -1,0 +1,138 @@
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/mixins" as *;
+
+.verify-insurance__eyebrow {
+  background: rgba(246, 196, 83, 0.18);
+  color: $gold-700;
+}
+
+.verify-insurance__pills {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: $space-2;
+  margin-top: $space-5;
+
+  li {
+    display: inline-flex;
+    align-items: center;
+    gap: $space-2;
+    font-family: $font-display;
+    font-weight: $fw-semibold;
+    color: $ink;
+    font-size: 0.92rem;
+
+    svg { color: $blue-700; }
+  }
+}
+
+.verify-insurance__legal {
+  margin-top: $space-6;
+  background: $white;
+  border: 1px solid $gray-100;
+  border-left: 4px solid $blue-500;
+  border-radius: $radius-md;
+  padding: $space-4;
+
+  strong {
+    font-family: $font-display;
+    font-weight: $fw-bold;
+    color: $blue-700;
+    font-size: 0.92rem;
+  }
+
+  p {
+    margin: 4px 0 0;
+    color: $ink-soft;
+    font-size: 0.86rem;
+    line-height: 1.55;
+  }
+}
+
+// Plans grid
+.verify-plans__grid {
+  display: grid;
+  gap: $space-3;
+  grid-template-columns: 1fr;
+  @include bp(sm) { grid-template-columns: repeat(2, 1fr); }
+  @include bp(md) { grid-template-columns: repeat(3, 1fr); }
+  @include bp(lg) { grid-template-columns: repeat(4, 1fr); }
+}
+
+.verify-plans__plan {
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+  background: $white;
+  border: 1px solid $gray-100;
+  border-radius: $radius-lg;
+  padding: $space-3 $space-4;
+  font-family: $font-display;
+  font-weight: $fw-semibold;
+  font-size: 0.92rem;
+  color: $ink;
+  transition: border-color $duration-fast, box-shadow $duration-fast;
+
+  &:hover { border-color: $green-300; box-shadow: $shadow-xs; }
+}
+
+.verify-plans__check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: $green-50;
+  color: $green-700;
+  flex-shrink: 0;
+}
+
+.verify-plans__accreditations {
+  margin-top: $space-8;
+  padding: $space-5;
+  background: $white;
+  border: 1px solid $gray-100;
+  border-radius: $radius-2xl;
+  text-align: center;
+
+  ul {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: $space-3;
+    margin: $space-3 0 0;
+    padding: 0;
+  }
+
+  li {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0.4rem 0.85rem;
+    background: $gray-50;
+    border-radius: $radius-full;
+    font-family: $font-display;
+    font-weight: $fw-semibold;
+    font-size: 0.86rem;
+    color: $ink;
+
+    svg { color: $green-700; }
+  }
+}
+
+.verify-plans__accreditations-eyebrow {
+  font-family: $font-display;
+  font-weight: $fw-bold;
+  font-size: 0.7rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: $gray-500;
+}
+
+// FAQ
+.verify-faq__footer {
+  margin-top: $space-6;
+  display: flex;
+  justify-content: center;
+}

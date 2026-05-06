@@ -1,0 +1,180 @@
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/mixins" as *;
+
+.about-timeline {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+
+  &::before {
+    content: "STORY";
+    position: absolute;
+    top: -2rem;
+    right: -1rem;
+    font-family: $font-display;
+    font-weight: $fw-extra;
+    font-size: clamp(7rem, 18vw, 18rem);
+    letter-spacing: -0.07em;
+    color: rgba($ink, 0.025);
+    pointer-events: none;
+    z-index: 0;
+    line-height: 1;
+    white-space: nowrap;
+  }
+}
+
+.about-timeline__list {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: $space-8;
+  margin-top: $space-12;
+
+  @include bp(lg) {
+    gap: $space-10;
+  }
+}
+
+.about-timeline__rail {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 28px;
+  width: 2px;
+  background: linear-gradient(to bottom, $blue-300, $green-400 50%, $coral-400);
+  border-radius: 999px;
+  opacity: 0.55;
+
+  @include bp(lg) {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+
+.about-timeline__item {
+  position: relative;
+  display: grid;
+  grid-template-columns: 60px 1fr;
+  gap: $space-4;
+  align-items: flex-start;
+
+  @include bp(lg) {
+    grid-template-columns: 1fr 60px 1fr;
+    gap: $space-6;
+
+    &--left .about-timeline__card {
+      grid-column: 1;
+      text-align: right;
+      align-items: flex-end;
+    }
+    &--left .about-timeline__node { grid-column: 2; }
+
+    &--right .about-timeline__card { grid-column: 3; }
+    &--right .about-timeline__node { grid-column: 2; }
+  }
+}
+
+.about-timeline__node {
+  position: relative;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 6px;
+  z-index: 1;
+
+  @include bp(lg) {
+    grid-row: 1;
+  }
+}
+
+.about-timeline__node-dot {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: $white;
+  border: 3px solid $blue-500;
+  box-shadow: 0 0 0 6px rgba($blue-500, 0.12), $shadow-md;
+}
+
+.about-timeline__card {
+  display: flex;
+  flex-direction: column;
+  gap: $space-3;
+  background: $white;
+  padding: $space-5 $space-6;
+  border-radius: $radius-xl;
+  border: 1px solid $gray-100;
+  box-shadow: $shadow-sm;
+  transition: transform $duration-base $ease-out-expo, box-shadow $duration-base $ease-soft;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: $shadow-md;
+  }
+}
+
+.about-timeline__card-head {
+  display: flex;
+  align-items: center;
+  gap: $space-3;
+  flex-wrap: wrap;
+
+  .about-timeline__item--left & {
+    @include bp(lg) {
+      justify-content: flex-end;
+    }
+  }
+}
+
+.about-timeline__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, $blue-500, $green-500);
+  color: $white;
+  flex-shrink: 0;
+}
+
+.about-timeline__year {
+  font-family: $font-display;
+  font-weight: $fw-extra;
+  font-size: 1.6rem;
+  letter-spacing: -0.02em;
+  color: $ink;
+  line-height: 1;
+}
+
+.about-timeline__chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.3rem 0.65rem;
+  background: $blue-50;
+  color: $blue-700;
+  border-radius: $radius-full;
+  font-family: $font-display;
+  font-weight: $fw-bold;
+  font-size: 0.66rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.about-timeline__title {
+  font-family: $font-display;
+  font-weight: $fw-extra;
+  font-size: clamp(1.2rem, 2vw, 1.4rem);
+  letter-spacing: -0.02em;
+  margin: 0;
+  color: $ink;
+}
+
+.about-timeline__desc {
+  margin: 0;
+  color: $ink-soft;
+  font-size: 0.95rem;
+  line-height: 1.55;
+}

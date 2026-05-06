@@ -1,0 +1,30 @@
+@use "../abstracts/variables" as *;
+@use "../abstracts/functions" as *;
+
+body {
+  font-family: $font-body;
+  font-size: 1rem;
+  font-weight: $fw-regular;
+  color: $ink;
+  background: $white;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: $font-display;
+  font-weight: $fw-bold;
+  letter-spacing: -0.02em;
+  line-height: 1.08;
+  color: $ink;
+}
+
+h1 { font-size: fluid(34, 76); line-height: 1.02; }
+h2 { font-size: fluid(28, 56); line-height: 1.06; }
+h3 { font-size: fluid(22, 36); line-height: 1.15; }
+h4 { font-size: fluid(18, 24); line-height: 1.25; }
+
+p { color: $ink-soft; max-width: 65ch; }
+
+::selection {
+  background: $blue-100;
+  color: $blue-900;
+}

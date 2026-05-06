@@ -1,0 +1,91 @@
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/mixins" as *;
+
+.trust-band {
+  padding-block: clamp(2rem, 4vw, 3.5rem);
+  background: $white;
+  border-block: 1px solid $gray-100;
+  display: flex;
+  flex-direction: column;
+  gap: $space-5;
+
+  @include bp-down(md) {
+    padding-block: clamp(1.5rem, 5vw, 2.25rem);
+    gap: $space-3;
+  }
+}
+
+.trust-band__heading {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
+
+.trust-band__eyebrow {
+  font-family: $font-display;
+  font-weight: $fw-semibold;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-size: 0.78rem;
+  color: $gray-500;
+}
+
+.trust-band__marquee {
+  // Default mask color resolves to the section background so the SVG mask edges
+  // blend cleanly into the surrounding chrome.
+  --marquee-mask-color: #{$white};
+}
+
+.trust-band__marquee--row-1 .marquee__group { gap: clamp(1.75rem, 4vw, 3rem); }
+.trust-band__marquee--row-2 { opacity: 0.92; }
+
+.trust-band__item {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-2;
+  font-family: $font-display;
+  font-weight: $fw-semibold;
+  font-size: 1rem;
+  color: $ink;
+  white-space: nowrap;
+
+  svg { color: $blue-600; }
+
+  @include bp-down(md) {
+    font-size: 0.85rem;
+    gap: 6px;
+
+    svg { width: 16px; height: 16px; }
+  }
+}
+
+.trust-band__item--accred {
+  color: $blue-700;
+}
+
+// Center emphasis (Joint Commission, HIPAA) — slightly larger, with a tinted pill
+.trust-band__item--emphasized {
+  padding: 0.5rem 1rem;
+  border-radius: $radius-full;
+  background: linear-gradient(135deg, $blue-50, $green-50);
+  border: 1.5px solid $blue-100;
+  color: $blue-900;
+  font-weight: $fw-bold;
+  font-size: 1.05rem;
+  box-shadow: 0 6px 18px rgba($blue-700, 0.08);
+
+  svg { color: $blue-700; }
+
+  @include bp-down(md) {
+    font-size: 0.86rem;
+    padding: 0.35rem 0.7rem;
+  }
+}
+
+.trust-band__item--insurance {
+  font-size: 0.95rem;
+  color: $gray-500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-weight: $fw-bold;
+}

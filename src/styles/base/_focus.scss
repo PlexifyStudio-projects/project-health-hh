@@ -1,0 +1,37 @@
+@use "../abstracts/variables" as *;
+
+:focus { outline: 0; }
+
+:focus-visible {
+  outline: 2px solid $blue-500;
+  outline-offset: 3px;
+  border-radius: 4px;
+  transition: outline-offset 0.15s ease;
+}
+
+button:focus-visible,
+a:focus-visible,
+[role="button"]:focus-visible,
+[tabindex]:not([tabindex="-1"]):focus-visible,
+summary:focus-visible {
+  outline-color: $coral-500;
+}
+
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline-color: $blue-500;
+  outline-offset: 2px;
+}
+
+// Honor reduced motion globally — disables every CSS animation/transition.
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

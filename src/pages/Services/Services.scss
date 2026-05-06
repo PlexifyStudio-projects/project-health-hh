@@ -1,0 +1,378 @@
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/mixins" as *;
+
+// =====================================================
+// HERO
+// =====================================================
+.services-page-hero {
+  position: relative;
+  isolation: isolate;
+  padding-top: calc(#{$header-height-lg} + 3rem);
+  padding-bottom: clamp(2.5rem, 5vw, 4rem);
+  background:
+    radial-gradient(800px 400px at 100% 0%, $green-50 0%, transparent 60%),
+    radial-gradient(800px 500px at 0% 100%, $blue-50 0%, transparent 60%),
+    $white;
+  overflow: hidden;
+
+  &::before {
+    content: "SERVICES";
+    position: absolute;
+    bottom: -3rem;
+    left: -1rem;
+    font-family: $font-display;
+    font-weight: $fw-extra;
+    font-size: clamp(7rem, 18vw, 18rem);
+    letter-spacing: -0.07em;
+    color: rgba($ink, 0.025);
+    pointer-events: none;
+    z-index: 0;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+  }
+
+  h1 {
+    font-size: clamp(2.4rem, 6vw, 4.6rem);
+    font-weight: $fw-extra;
+    letter-spacing: -0.035em;
+    line-height: 1.0;
+    margin: $space-4 0 $space-4;
+    max-width: 22ch;
+
+    em {
+      font-family: $font-serif;
+      font-style: italic;
+      font-weight: $fw-regular;
+      @include gradient-text($blue-600, $green-600);
+    }
+  }
+
+  p {
+    font-size: 1.1rem;
+    color: $ink-soft;
+    max-width: 60ch;
+    line-height: 1.55;
+
+    a {
+      color: $blue-700;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      text-decoration-thickness: 1.5px;
+
+      &:hover { color: $blue-800; }
+    }
+  }
+}
+
+.services-page-hero__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: $font-display;
+  font-weight: $fw-semibold;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-size: 0.78rem;
+  color: $blue-700;
+  background: $blue-50;
+  padding: $space-2 $space-4;
+  border-radius: $radius-full;
+}
+
+.services-page-hero__highlights {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: $space-4;
+  list-style: none;
+  margin: $space-8 0 0;
+  padding: 0;
+  border-top: 1px solid $gray-100;
+  padding-top: $space-6;
+
+  @include bp(md) { grid-template-columns: repeat(4, 1fr); }
+
+  li {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+
+    strong {
+      font-family: $font-display;
+      font-weight: $fw-extra;
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      letter-spacing: -0.02em;
+      @include gradient-text($blue-600, $green-600);
+      line-height: 1;
+    }
+
+    span {
+      font-family: $font-display;
+      font-weight: $fw-semibold;
+      font-size: 0.82rem;
+      color: $ink-soft;
+      letter-spacing: 0.04em;
+    }
+  }
+}
+
+// =====================================================
+// FILTER CHIPS
+// =====================================================
+.services-filters {
+  background: $white;
+  padding-top: $space-8;
+  padding-bottom: $space-4;
+}
+
+.services-filters__bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-2;
+  justify-content: center;
+}
+
+.services-filters__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-2;
+  padding: 0.55rem 1rem;
+  background: $white;
+  border: 1px solid $gray-200;
+  border-radius: $radius-full;
+  font-family: $font-display;
+  font-weight: $fw-semibold;
+  font-size: 0.88rem;
+  color: $ink-soft;
+  cursor: pointer;
+  transition:
+    background $duration-base $ease-soft,
+    color $duration-base $ease-soft,
+    border-color $duration-base $ease-soft,
+    transform $duration-base $ease-out-expo;
+
+  &:hover {
+    border-color: $blue-300;
+    color: $blue-700;
+    transform: translateY(-2px);
+  }
+
+  &.is-active {
+    background: linear-gradient(135deg, $blue-500, $green-500);
+    color: $white;
+    border-color: transparent;
+    box-shadow: $shadow-glow-blue;
+  }
+
+  @include focus-ring($blue-500);
+}
+
+.services-filters__chip-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: $radius-full;
+  background: rgba($ink, 0.08);
+  font-size: 0.72rem;
+  font-weight: $fw-bold;
+
+  .is-active & { background: rgba($white, 0.22); }
+}
+
+.services-filters__hint {
+  text-align: center;
+  margin: $space-5 0 0;
+  font-size: 0.92rem;
+  color: $ink-soft;
+
+  em {
+    font-family: $font-serif;
+    font-style: italic;
+    color: $blue-700;
+  }
+}
+
+// =====================================================
+// LIST ROWS
+// =====================================================
+.service-row {
+  display: grid;
+  gap: clamp(2rem, 5vw, 4rem);
+  align-items: center;
+  margin-bottom: clamp(3rem, 6vw, 5rem);
+  grid-template-columns: 1fr;
+
+  @include bp(lg) { grid-template-columns: 1fr 1fr; }
+
+  &--reverse .service-row__media { @include bp(lg) { order: 2; } }
+}
+
+.service-row__media {
+  position: relative;
+  border-radius: $radius-2xl;
+  overflow: hidden;
+  aspect-ratio: 5 / 4;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.8s $ease-out-expo;
+  }
+
+  &:hover img { transform: scale(1.04); }
+}
+
+.service-row__stat {
+  position: absolute;
+  left: $space-4;
+  bottom: $space-4;
+  display: inline-flex;
+  align-items: center;
+  gap: $space-3;
+  padding: $space-3 $space-4;
+  background: rgba($white, 0.94);
+  backdrop-filter: blur(10px);
+  border-radius: $radius-xl;
+  box-shadow: $shadow-md;
+
+  strong {
+    font-family: $font-display;
+    font-weight: $fw-extra;
+    font-size: 1.05rem;
+    letter-spacing: -0.01em;
+    color: $blue-800;
+  }
+
+  em {
+    font-family: $font-serif;
+    font-style: italic;
+    font-weight: $fw-regular;
+    font-size: 0.84rem;
+    color: $ink-soft;
+  }
+}
+
+.service-row__stat-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, $blue-500, $green-500);
+  color: $white;
+  flex-shrink: 0;
+}
+
+.service-row__body {
+  display: flex;
+  flex-direction: column;
+  gap: $space-3;
+}
+
+.service-row__head {
+  display: flex;
+  align-items: center;
+  gap: $space-3;
+  margin-bottom: $space-2;
+}
+
+.service-row__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: $green-50;
+  color: $green-700;
+}
+
+.service-row__cat {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.3rem 0.65rem;
+  background: $blue-50;
+  color: $blue-700;
+  border-radius: $radius-full;
+  font-family: $font-display;
+  font-weight: $fw-bold;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.service-row h2 {
+  font-family: $font-display;
+  font-weight: $fw-extra;
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  letter-spacing: -0.025em;
+  margin: 0;
+}
+
+.service-row__short {
+  color: $ink-soft;
+  font-size: 1.05rem;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.service-row__features {
+  display: grid;
+  gap: $space-2;
+  list-style: none;
+  margin: $space-2 0;
+  padding: 0;
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: $space-2;
+    color: $ink;
+    font-size: 0.95rem;
+
+    svg { color: $green-600; flex-shrink: 0; }
+  }
+}
+
+.service-row__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-4;
+  margin-top: $space-2;
+}
+
+.service-row__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: $font-display;
+  font-weight: $fw-semibold;
+  color: $blue-700;
+  text-decoration: none;
+  transition: color $duration-base $ease-soft, gap $duration-base $ease-soft;
+
+  &:hover {
+    color: $blue-800;
+    gap: 10px;
+  }
+
+  &--ghost {
+    color: $coral-700;
+    &:hover { color: $coral-700; }
+  }
+}
+
+.services-list__empty {
+  text-align: center;
+  color: $ink-soft;
+  padding: $space-12 0;
+}

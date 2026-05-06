@@ -1,0 +1,714 @@
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/mixins" as *;
+
+// =====================================================
+// HERO
+// =====================================================
+.about-hero {
+  position: relative;
+  isolation: isolate;
+  padding-top: calc(#{$header-height-lg} + 1.25rem);
+  padding-bottom: clamp(3rem, 6vw, 5rem);
+  background:
+    radial-gradient(900px 500px at 100% 0%, rgba($coral-100, 0.55) 0%, transparent 65%),
+    radial-gradient(800px 500px at 0% 100%, rgba($blue-50, 0.85) 0%, transparent 65%),
+    $cream;
+  overflow: hidden;
+
+  @include bp-down(md) {
+    padding-top: calc(#{$header-height-sm} + 0.75rem);
+    padding-bottom: clamp(1.5rem, 5vw, 2.5rem);
+  }
+}
+
+// Top magazine-style strip
+.about-hero__strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $space-3;
+  padding-block: $space-3;
+  border-bottom: 1px solid $ink;
+  font-family: $font-display;
+  font-weight: $fw-bold;
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: $ink;
+  margin-bottom: clamp(2rem, 4vw, 3.5rem);
+  position: relative;
+  z-index: 1;
+
+  @include bp-down(md) {
+    padding-block: 6px;
+    margin-bottom: $space-4;
+    font-size: 0.6rem;
+    letter-spacing: 0.14em;
+  }
+}
+
+.about-hero__strip-mark {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  svg { color: $coral-500; }
+}
+
+.about-hero__strip-meta {
+  flex: 1;
+  text-align: center;
+  color: $ink-soft;
+  letter-spacing: 0.14em;
+
+  @include bp-down(md) { display: none; }
+}
+
+.about-hero__strip-date { color: $gray-500; }
+
+// Main grid
+.about-hero__main {
+  display: grid;
+  align-items: start;
+  gap: clamp(2rem, 5vw, 5rem);
+  grid-template-columns: 1fr;
+  position: relative;
+  z-index: 1;
+
+  @include bp(lg) { grid-template-columns: 1.1fr 1fr; }
+
+  // Tablet: text on the left, photo stack on the right — 2-col magazine
+  // spread that uses the horizontal real estate without cramping desktop.
+  @include bp(md) {
+    @include bp-down(lg) {
+      grid-template-columns: 1.1fr 1fr;
+      gap: clamp(2rem, 4vw, 3rem);
+    }
+  }
+}
+
+// Story side
+.about-hero__story {
+  display: flex;
+  flex-direction: column;
+  gap: $space-5;
+
+  @include bp-down(md) {
+    gap: $space-3;
+  }
+}
+
+.about-hero__chapter {
+  font-family: $font-display;
+  font-weight: $fw-bold;
+  font-size: 0.74rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: $coral-700;
+}
+
+.about-hero__title {
+  font-family: $font-serif;
+  font-weight: $fw-regular;
+  font-size: clamp(2.4rem, 6vw, 4.6rem);
+  letter-spacing: -0.025em;
+  line-height: 1.04;
+  margin: 0;
+  color: $ink;
+
+  em {
+    font-style: italic;
+    @include gradient-text($coral-600, $blue-600);
+  }
+}
+
+.about-hero__lede {
+  font-size: clamp(1rem, 1.4vw, 1.1rem);
+  color: $ink-soft;
+  max-width: 56ch;
+  line-height: 1.65;
+  margin: 0;
+
+  em {
+    font-family: $font-serif;
+    font-style: italic;
+    color: $ink;
+    font-weight: $fw-medium;
+  }
+}
+
+// Founder signature
+.about-hero__signature {
+  display: flex;
+  align-items: center;
+  gap: $space-3;
+  margin: $space-3 0 $space-2;
+  padding: $space-3 $space-4;
+  background: rgba($white, 0.7);
+  border: 1px solid $gray-100;
+  border-radius: $radius-xl;
+  align-self: flex-start;
+  backdrop-filter: blur(8px);
+
+  img {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid $white;
+    box-shadow: $shadow-sm;
+  }
+
+  figcaption {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+
+    strong {
+      font-family: $font-display;
+      font-weight: $fw-bold;
+      font-size: 0.95rem;
+      color: $ink;
+    }
+    em {
+      font-style: normal;
+      font-size: 0.78rem;
+      color: $gray-500;
+      margin-top: 2px;
+    }
+  }
+}
+
+.about-hero__badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-3;
+}
+
+.about-hero__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-3 $space-5;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid $gray-100;
+  padding-top: $space-4;
+
+  li {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: $font-display;
+    font-weight: $fw-semibold;
+    font-size: 0.85rem;
+    color: $ink-soft;
+
+    svg { color: $coral-500; }
+  }
+}
+
+// Photo collage side
+// Desktop (lg+): magazine-style absolute collage.
+// Below lg: clean linear stack — photos as full-width rows, the quote chip and
+// "since" badge become inline cards. Avoids overlap on mobile/tablet.
+.about-hero__collage {
+  position: relative;
+  width: 100%;
+
+  @include bp(lg) {
+    min-height: 540px;
+  }
+
+  @include bp-down(lg) {
+    display: grid;
+    gap: $space-4;
+    grid-template-columns: 1fr;
+  }
+}
+
+.about-hero__photo {
+  position: absolute;
+  margin: 0;
+  border-radius: $radius-xl;
+  overflow: hidden;
+  box-shadow: $shadow-xl;
+  background: $blue-50;
+
+  img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  figcaption {
+    position: absolute;
+    left: 12px; bottom: 12px;
+    padding: 0.32rem 0.65rem;
+    background: rgba($white, 0.95);
+    backdrop-filter: blur(8px);
+    border-radius: $radius-full;
+    font-family: $font-display;
+    font-weight: $fw-bold;
+    font-size: 0.66rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: $ink;
+  }
+
+  // Below lg: photos become flow children, full-width, no rotation.
+  @include bp-down(lg) {
+    position: relative;
+    width: 100%;
+    transform: none !important;
+    border: 0;
+  }
+}
+
+.about-hero__photo--main {
+  top: 0;
+  right: 4%;
+  width: 64%;
+  aspect-ratio: 3 / 4;
+  transform: rotate(2deg);
+  z-index: 1;
+
+  @include bp-down(lg) {
+    aspect-ratio: 16 / 10;
+  }
+
+  // Tablet: photo lives in the narrow right column — taller portrait reads
+  // better than the mobile-style 16:10 letterbox.
+  @include bp(md) {
+    @include bp-down(lg) {
+      aspect-ratio: 4 / 5;
+    }
+  }
+}
+
+.about-hero__photo--secondary {
+  bottom: 6%;
+  left: 0;
+  width: 54%;
+  aspect-ratio: 4 / 3;
+  transform: rotate(-3deg);
+  z-index: 2;
+  border: 4px solid $white;
+
+  @include bp-down(lg) {
+    aspect-ratio: 16 / 10;
+    border: 0;
+  }
+
+  @include bp(md) {
+    @include bp-down(lg) {
+      aspect-ratio: 4 / 3;
+    }
+  }
+
+  // Phone — drop second photo so the collage stays minimal: 1 photo + 1 chip.
+  @include bp-down(md) { display: none; }
+}
+
+// Quote chip
+.about-hero__quote {
+  position: absolute;
+  top: 38%;
+  right: -3%;
+  z-index: 3;
+  background: $ink;
+  color: $white;
+  padding: $space-3 $space-4;
+  border-radius: $radius-xl;
+  max-width: 240px;
+  box-shadow: $shadow-lg;
+  display: flex;
+  flex-direction: column;
+  gap: $space-2;
+  transform: rotate(4deg);
+
+  svg { color: $coral-300; }
+
+  p {
+    margin: 0;
+    font-family: $font-serif;
+    font-style: italic;
+    font-size: 0.95rem;
+    line-height: 1.4;
+  }
+
+  // Below lg: become an inline editorial card in the stack flow.
+  @include bp-down(lg) {
+    position: relative;
+    top: auto; right: auto;
+    max-width: none;
+    width: 100%;
+    transform: none;
+  }
+}
+
+// Founded badge
+.about-hero__since {
+  position: absolute;
+  bottom: -2%;
+  right: 8%;
+  z-index: 4;
+  background: $white;
+  border: 1.5px solid $gray-100;
+  border-radius: $radius-xl;
+  padding: $space-3 $space-4;
+  box-shadow: $shadow-lg;
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+  align-items: flex-start;
+
+  strong {
+    font-family: $font-display;
+    font-weight: $fw-extra;
+    font-size: 1.8rem;
+    @include gradient-text($coral-600, $blue-600);
+    margin-top: 4px;
+  }
+
+  // Below lg: align with the stacked flow, sit flush.
+  @include bp-down(lg) {
+    position: relative;
+    bottom: auto; right: auto;
+    flex-direction: row;
+    align-items: center;
+    gap: $space-3;
+    width: 100%;
+
+    strong { margin-top: 0; }
+  }
+
+  // Phone — hide the "Founded 2018" badge; the strip already says it.
+  @include bp-down(md) { display: none; }
+}
+
+.about-hero__since-eyebrow {
+  font-family: $font-display;
+  font-weight: $fw-bold;
+  font-size: 0.6rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: $gray-500;
+}
+
+.about-hero__since-meta {
+  font-size: 0.7rem;
+  color: $gray-500;
+  margin-top: 2px;
+}
+
+.about-hero__media {
+  position: relative;
+  border-radius: $radius-2xl;
+  overflow: hidden;
+  box-shadow: $shadow-xl;
+  aspect-ratio: 4 / 5;
+
+  img { width: 100%; height: 100%; object-fit: cover; }
+}
+
+.about-hero__caption {
+  position: absolute;
+  left: $space-4;
+  bottom: $space-4;
+  display: flex;
+  flex-direction: column;
+  gap: $space-2;
+  padding: $space-4 $space-5;
+  background: rgba($white, 0.92);
+  backdrop-filter: blur(10px);
+  border-radius: $radius-xl;
+  box-shadow: $shadow-md;
+  margin: 0;
+  max-width: 70%;
+
+  em {
+    font-family: $font-serif;
+    font-style: italic;
+    font-weight: $fw-regular;
+    font-size: 1.05rem;
+    color: $ink;
+  }
+}
+
+.about-hero__caption-pill {
+  display: inline-flex;
+  align-self: flex-start;
+  padding: 0.25rem 0.6rem;
+  background: $coral-50;
+  color: $coral-700;
+  border-radius: $radius-full;
+  font-family: $font-display;
+  font-weight: $fw-bold;
+  font-size: 0.66rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+// =====================================================
+// MISSION + VALUES
+// =====================================================
+.about-mission {
+  background: $white;
+}
+
+.about-mission__layout {
+  display: grid;
+  gap: clamp(2rem, 5vw, 4rem);
+  align-items: start;
+  grid-template-columns: 1fr;
+
+  @include bp(lg) { grid-template-columns: 1fr 1.1fr; }
+}
+
+.about-mission__statement {
+  display: flex;
+  flex-direction: column;
+  gap: $space-4;
+  position: sticky;
+  top: calc(#{$header-height-lg} + 1.5rem);
+
+  p {
+    margin: 0;
+    color: $ink-soft;
+    font-size: 1.05rem;
+    line-height: 1.65;
+    max-width: 50ch;
+  }
+}
+
+.about-mission__eyebrow {
+  display: inline-block;
+  align-self: flex-start;
+  font-family: $font-display;
+  font-weight: $fw-semibold;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-size: 0.78rem;
+  color: $blue-700;
+  background: $blue-50;
+  padding: $space-2 $space-4;
+  border-radius: $radius-full;
+}
+
+.about-mission__title {
+  font-family: $font-display;
+  font-weight: $fw-extra;
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  margin: 0;
+  color: $ink;
+
+  em {
+    font-family: $font-serif;
+    font-style: italic;
+    font-weight: $fw-regular;
+    @include gradient-text($blue-600, $green-600);
+  }
+}
+
+.about-values__grid {
+  display: grid;
+  gap: $space-4;
+  grid-template-columns: 1fr;
+  @include bp(sm) { grid-template-columns: repeat(2, 1fr); }
+}
+
+.value-card {
+  background: $white;
+  border-radius: $radius-xl;
+  padding: $space-5;
+  border: 1px solid $gray-100;
+  display: flex;
+  flex-direction: column;
+  gap: $space-2;
+  transition: transform $duration-base $ease-out-expo, box-shadow $duration-base $ease-soft, border-color $duration-base $ease-soft;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: $shadow-md;
+    border-color: $blue-100;
+  }
+
+  h3 {
+    font-family: $font-display;
+    font-weight: $fw-bold;
+    font-size: 1.1rem;
+    margin: 0;
+  }
+
+  p {
+    color: $ink-soft;
+    font-size: 0.92rem;
+    margin: 0;
+    line-height: 1.55;
+  }
+}
+
+.value-card__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, $blue-500, $green-500);
+  color: $white;
+  margin-bottom: $space-2;
+}
+
+// =====================================================
+// TEAM
+// =====================================================
+.about-team__filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-2;
+  justify-content: center;
+  margin: $space-8 0 $space-10;
+}
+
+.about-team__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-2;
+  padding: 0.55rem 1rem;
+  background: $white;
+  border: 1px solid $gray-200;
+  border-radius: $radius-full;
+  font-family: $font-display;
+  font-weight: $fw-semibold;
+  font-size: 0.88rem;
+  color: $ink-soft;
+  cursor: pointer;
+  transition:
+    background $duration-base $ease-soft,
+    color $duration-base $ease-soft,
+    border-color $duration-base $ease-soft,
+    transform $duration-base $ease-out-expo;
+
+  &:hover {
+    border-color: $blue-300;
+    color: $blue-700;
+    transform: translateY(-2px);
+  }
+
+  &.is-active {
+    background: linear-gradient(135deg, $blue-500, $green-500);
+    color: $white;
+    border-color: transparent;
+    box-shadow: $shadow-glow-blue;
+  }
+
+  @include focus-ring($blue-500);
+}
+
+.about-team__chip-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: $radius-full;
+  background: rgba($ink, 0.08);
+  font-size: 0.72rem;
+  font-weight: $fw-bold;
+
+  .is-active & {
+    background: rgba($white, 0.22);
+  }
+}
+
+.about-team__grid {
+  display: grid;
+  gap: $space-5;
+  grid-template-columns: 1fr;
+  @include bp(md) { grid-template-columns: repeat(2, 1fr); }
+  @include bp(lg) { grid-template-columns: repeat(4, 1fr); }
+}
+
+.team-card {
+  display: flex;
+  flex-direction: column;
+  gap: $space-2;
+
+  h3 {
+    font-family: $font-display;
+    font-weight: $fw-bold;
+    font-size: 1.05rem;
+    margin: 0;
+  }
+
+  p {
+    color: $ink-soft;
+    font-size: 0.9rem;
+    margin: 0;
+    line-height: 1.5;
+  }
+}
+
+.team-card__photo {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: $radius-2xl;
+  overflow: hidden;
+  margin-bottom: $space-3;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.7s $ease-out-expo;
+  }
+
+  .team-card:hover & img { transform: scale(1.06); }
+}
+
+.team-card__dept {
+  position: absolute;
+  top: $space-3;
+  left: $space-3;
+  padding: 0.3rem 0.65rem;
+  background: rgba($white, 0.92);
+  backdrop-filter: blur(6px);
+  color: $blue-700;
+  border-radius: $radius-full;
+  font-family: $font-display;
+  font-weight: $fw-bold;
+  font-size: 0.66rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.team-card__role {
+  font-family: $font-display;
+  font-weight: $fw-semibold;
+  font-size: 0.86rem;
+  color: $blue-700;
+}
+
+.team-card__creds {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  li {
+    padding: 0.18rem 0.55rem;
+    background: $gray-100;
+    color: $ink-soft;
+    border-radius: $radius-full;
+    font-family: $font-display;
+    font-weight: $fw-semibold;
+    font-size: 0.68rem;
+    letter-spacing: 0.05em;
+  }
+}

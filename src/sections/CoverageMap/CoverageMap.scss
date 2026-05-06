@@ -1,0 +1,463 @@
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/mixins" as *;
+
+.coverage-map {
+  background: $white;
+  @include phone-section-padding;
+  @include phone-header-compact;
+}
+
+.coverage-map__grid {
+  display: grid;
+  gap: clamp(2rem, 5vw, 4rem);
+  align-items: center;
+  grid-template-columns: 1fr;
+  @include bp(lg) { grid-template-columns: 1.05fr 1fr; }
+
+  // Tablet: stack map on top (full width) with regions below in a 2-col grid.
+  @include bp(md) {
+    @include bp-down(lg) {
+      grid-template-columns: 1fr;
+      gap: clamp(2rem, 4vw, 3rem);
+    }
+  }
+}
+
+// =========================
+// REAL MAP (OSM iframe + overlays)
+// =========================
+.coverage-map__visual { display: flex; justify-content: center; }
+
+.coverage-map__realmap {
+  position: relative;
+  width: 100%;
+  max-width: 720px;
+  aspect-ratio: 3 / 2;
+  border-radius: $radius-2xl;
+  overflow: hidden;
+  border: 1.5px solid $gray-100;
+  box-shadow: 0 28px 60px rgba(15, 36, 69, 0.16);
+  isolation: isolate;
+  background: #CFE3FB;
+
+  // Tablet: stretch full width since the grid stacks here. Slightly squarer
+  // aspect so the map dominates and the regions below get visual weight.
+  @include bp(md) {
+    @include bp-down(lg) {
+      max-width: 100%;
+      aspect-ratio: 16 / 9;
+    }
+  }
+}
+
+// Leaflet container — fully locked, no interactions
+.coverage-map__leaflet {
+  position: absolute;
+  inset: 0;
+  width: 100%; height: 100%;
+  background: #B4D2F2;
+  filter: saturate(0.92) brightness(1.02);
+  z-index: 0;
+  cursor: default !important;
+
+  // Prevent any interaction with tile layer
+  .leaflet-tile-pane,
+  .leaflet-overlay-pane,
+  .leaflet-marker-pane { pointer-events: none; }
+
+  // Re-enable pointer-events only on our markers (for tooltip hover)
+  .coverage-map__divicon { pointer-events: auto; }
+}
+
+// Hide all leaflet controls
+.coverage-map__leaflet .leaflet-control-attribution,
+.coverage-map__leaflet .leaflet-control-zoom { display: none !important; }
+
+// Custom HTML marker (divIcon)
+.coverage-map__divicon {
+  background: transparent !important;
+  border: 0 !important;
+  overflow: visible !important;
+}
+.coverage-map__divicon .lm {
+  position: relative;
+  width: 22px; height: 22px;
+}
+
+.coverage-map__marker-inner {
+  position: absolute;
+  inset: 0;
+  width: 100%; height: 100%;
+  will-change: transform, opacity;
+}
+
+// Scale bar
+.coverage-map__scale {
+  position: absolute;
+  bottom: 14px; right: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0.4rem 0.7rem;
+  background: rgba($white, 0.96);
+  border: 1px solid $gray-100;
+  border-radius: $radius-md;
+  z-index: 3;
+  backdrop-filter: blur(6px);
+  font-family: $font-display;
+}
+
+.coverage-map__scale-bar {
+  display: inline-block;
+  width: 50px;
+  height: 4px;
+  border-left:  3px solid $ink;
+  border-right: 3px solid $ink;
+  border-bottom: 1.5px solid $ink;
+  border-top: 0;
+}
+
+.coverage-map__scale-text {
+  font-size: 0.66rem;
+  font-weight: $fw-bold;
+  color: $ink;
+  letter-spacing: 0.04em;
+}
+
+// Markers overlay
+.coverage-map__markers {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.coverage-map__marker {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  pointer-events: auto;
+  cursor: default;
+
+  &:hover .coverage-map__marker-label,
+  &:focus-within .coverage-map__marker-label {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-4px);
+  }
+  &:hover .coverage-map__marker-dot {
+    transform: scale(1.25);
+  }
+}
+
+.coverage-map__marker-dot {
+  position: relative;
+  display: block;
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  border: 3px solid $white;
+  box-shadow: 0 6px 14px rgba(15, 36, 69, 0.35);
+  z-index: 2;
+  transition: transform 0.25s $ease-out-expo;
+}
+
+.coverage-map__marker-pulse {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  z-index: 1;
+  animation: marker-pulse 2.4s ease-out infinite;
+  animation-delay: var(--pulse-delay, 0s);
+}
+
+@keyframes marker-pulse {
+  0%   { transform: translate(-50%, -50%) scale(1);   opacity: 0.65; }
+  100% { transform: translate(-50%, -50%) scale(3.4); opacity: 0;    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .coverage-map__marker-pulse { animation: none; opacity: 0.3; }
+}
+
+// Marker color variants
+.coverage-map__marker--blue  .coverage-map__marker-dot   { background: $blue-500;  }
+.coverage-map__marker--blue  .coverage-map__marker-pulse { background: rgba($blue-500, 0.4); }
+.coverage-map__marker--green .coverage-map__marker-dot   { background: $green-500; }
+.coverage-map__marker--green .coverage-map__marker-pulse { background: rgba($green-500, 0.4); }
+.coverage-map__marker--coral .coverage-map__marker-dot   { background: $coral-500; }
+.coverage-map__marker--coral .coverage-map__marker-pulse { background: rgba($coral-500, 0.4); }
+.coverage-map__marker--ink   .coverage-map__marker-dot   { background: $ink;       }
+.coverage-map__marker--ink   .coverage-map__marker-pulse { background: rgba($ink,       0.4); }
+.coverage-map__marker--gold  .coverage-map__marker-dot   { background: $gold-500;  }
+.coverage-map__marker--gold  .coverage-map__marker-pulse { background: rgba($gold-500,  0.4); }
+
+// Marker label tooltip
+.coverage-map__marker-label {
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translate(-50%, -100%);
+  background: $white;
+  border: 1px solid $gray-100;
+  border-radius: $radius-md;
+  padding: 0.45rem 0.7rem;
+  box-shadow: $shadow-md;
+  font-family: $font-display;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s $ease-soft, transform 0.25s $ease-out-expo;
+  z-index: 3;
+
+  strong {
+    display: block;
+    font-weight: $fw-bold;
+    font-size: 0.82rem;
+    color: $ink;
+  }
+  em {
+    display: block;
+    font-style: normal;
+    font-size: 0.72rem;
+    color: $gray-500;
+    margin-top: 1px;
+  }
+
+  // Caret
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: -6px;
+    left: 50%;
+    transform: translateX(-50%) rotate(45deg);
+    width: 10px; height: 10px;
+    background: $white;
+    border-right: 1px solid $gray-100;
+    border-bottom: 1px solid $gray-100;
+  }
+}
+
+// Compass
+.coverage-map__compass {
+  position: absolute;
+  top: 14px; right: 14px;
+  font-family: $font-display;
+  font-weight: $fw-bold;
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  color: $ink;
+  background: rgba($white, 0.95);
+  border: 1px solid $gray-100;
+  padding: 0.32rem 0.6rem;
+  border-radius: $radius-full;
+  box-shadow: $shadow-xs;
+  z-index: 3;
+  backdrop-filter: blur(8px);
+}
+
+// Legend card
+.coverage-map__legend {
+  position: absolute;
+  bottom: 14px; left: 14px;
+  background: rgba($white, 0.96);
+  border: 1px solid $gray-100;
+  border-radius: $radius-md;
+  padding: 0.7rem 0.95rem;
+  box-shadow: $shadow-md;
+  z-index: 3;
+  backdrop-filter: blur(10px);
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+}
+
+.coverage-map__legend-eyebrow {
+  font-family: $font-display;
+  font-weight: $fw-bold;
+  font-size: 0.62rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: $gray-500;
+}
+
+.coverage-map__legend-value {
+  font-family: $font-display;
+  font-weight: $fw-extra;
+  font-size: 1.25rem;
+  letter-spacing: -0.025em;
+  color: $blue-700;
+  margin-top: 4px;
+}
+
+.coverage-map__legend-meta {
+  font-size: 0.7rem;
+  color: $gray-500;
+  margin-top: 3px;
+}
+
+// OSM attribution
+.coverage-map__attribution {
+  position: absolute;
+  bottom: 8px; right: 12px;
+  background: rgba($white, 0.85);
+  color: $gray-500;
+  font-size: 0.62rem;
+  font-family: $font-body;
+  padding: 0.18rem 0.45rem;
+  border-radius: $radius-sm;
+  text-decoration: none;
+  z-index: 3;
+  backdrop-filter: blur(6px);
+
+  &:hover { color: $blue-700; }
+}
+
+// =========================
+// REGION CARDS LIST
+// =========================
+.coverage-map__regions {
+  display: flex;
+  flex-direction: column;
+  gap: $space-3;
+
+  // Tablet: 2-col grid since map is now stacked above and regions get the
+  // full width below. Avoids a tall single column of cards.
+  @include bp(md) {
+    @include bp-down(lg) {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: $space-3;
+    }
+  }
+}
+
+// Region uses native <details>/<summary> so it expands on phone tap. On
+// desktop/tablet we open them by default and remove the marker so it looks
+// like the original cards.
+.coverage-map__region {
+  background: $white;
+  border-radius: $radius-xl;
+  border: 1.5px solid $gray-100;
+  padding: $space-4 $space-5;
+  transition:
+    border-color $duration-base,
+    box-shadow $duration-base,
+    transform $duration-base $ease-out-expo;
+
+  &:hover {
+    border-color: $blue-300;
+    box-shadow: $shadow-md;
+    transform: translateY(-2px);
+  }
+
+  // Default: behave like before — show all content (force open on tablet/desktop).
+  @include bp(md) {
+    &[open] > .coverage-map__cities,
+    & > .coverage-map__cities { display: block; }
+  }
+
+  // Phone — collapsed by default; tap to expand. Compact padding.
+  @include bp-down(md) {
+    padding: $space-3 $space-4;
+    border-radius: $radius-lg;
+
+    & > summary {
+      list-style: none;
+      cursor: pointer;
+      margin-bottom: 0;
+
+      &::-webkit-details-marker { display: none; }
+    }
+
+    & > .coverage-map__cities {
+      display: none;
+      padding-left: 44px;
+      margin-top: $space-2;
+    }
+
+    &[open] > .coverage-map__cities { display: block; }
+
+    // Caret indicator
+    & > summary::after {
+      content: "+";
+      margin-left: auto;
+      width: 24px; height: 24px;
+      display: inline-grid;
+      place-items: center;
+      border-radius: 50%;
+      background: $blue-50;
+      color: $blue-700;
+      font-weight: $fw-bold;
+      font-size: 1rem;
+      line-height: 1;
+      transition: transform $duration-fast $ease-soft, background-color $duration-fast;
+      flex-shrink: 0;
+    }
+    &[open] > summary::after {
+      content: "−";
+      background: $coral-500;
+      color: $white;
+    }
+  }
+}
+
+// Force-show details content on tablet/desktop where the accordion is unwanted.
+@include bp(md) {
+  .coverage-map__region > .coverage-map__cities { display: block !important; }
+}
+
+.coverage-map__region-head {
+  display: flex;
+  align-items: center;
+  gap: $space-3;
+  margin-bottom: $space-2;
+
+  @include bp-down(md) { margin-bottom: 0; }
+}
+
+.coverage-map__region-title {
+  flex: 1;
+  font-family: $font-display;
+  font-weight: $fw-extra;
+  font-size: 1.1rem;
+  letter-spacing: -0.01em;
+  color: $ink;
+  margin: 0;
+}
+
+.coverage-map__region-count {
+  font-family: $font-display;
+  font-weight: $fw-bold;
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: $gray-500;
+  background: $gray-100;
+  padding: 0.28rem 0.6rem;
+  border-radius: $radius-full;
+}
+
+.coverage-map__pin {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px; height: 36px;
+  border-radius: 12px;
+  background: $blue-50;
+  color: $blue-700;
+  flex-shrink: 0;
+}
+
+.coverage-map__pin--blue  { background: $blue-50;  color: $blue-700;  }
+.coverage-map__pin--green { background: $green-50; color: $green-700; }
+.coverage-map__pin--coral { background: $coral-50; color: $coral-700; }
+.coverage-map__pin--ink   { background: $gray-100; color: $ink;       }
+.coverage-map__pin--gold  { background: rgba($gold-500, 0.18); color: $gold-700; }
+
+.coverage-map__cities {
+  color: $ink-soft;
+  font-size: 0.9rem;
+  margin: 0;
+  line-height: 1.65;
+  padding-left: 48px;
+}

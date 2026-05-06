@@ -1,0 +1,109 @@
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/mixins" as *;
+
+.service-journey {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.service-journey__list {
+  position: relative;
+  list-style: none;
+  margin: $space-12 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: $space-6;
+}
+
+.service-journey__rail {
+  position: absolute;
+  top: 18px;
+  bottom: 0;
+  left: 27px;
+  width: 2px;
+  background: $gray-200;
+  border-radius: 999px;
+  z-index: 0;
+}
+
+.service-journey__fill {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, $blue-500, $green-500, $coral-500);
+  border-radius: inherit;
+  transform-origin: top center;
+}
+
+.service-journey__step {
+  position: relative;
+  display: grid;
+  grid-template-columns: 60px 1fr;
+  gap: $space-4;
+  z-index: 1;
+}
+
+.service-journey__marker {
+  position: relative;
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, $blue-500, $green-500);
+  color: $white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: $shadow-glow-blue;
+  font-family: $font-display;
+  font-weight: $fw-extra;
+  font-size: 1.05rem;
+  letter-spacing: -0.02em;
+}
+
+.service-journey__body {
+  display: flex;
+  flex-direction: column;
+  gap: $space-2;
+  background: $white;
+  padding: $space-5;
+  border-radius: $radius-xl;
+  border: 1px solid $gray-100;
+  box-shadow: $shadow-xs;
+  transition: transform $duration-base $ease-out-expo, box-shadow $duration-base $ease-soft;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: $shadow-md;
+  }
+
+  h3 {
+    font-family: $font-display;
+    font-weight: $fw-extra;
+    font-size: 1.2rem;
+    letter-spacing: -0.02em;
+    margin: 0;
+  }
+
+  p {
+    margin: 0;
+    color: $ink-soft;
+    font-size: 0.95rem;
+    line-height: 1.55;
+  }
+}
+
+.service-journey__chip {
+  display: inline-flex;
+  align-self: flex-start;
+  padding: 0.3rem 0.7rem;
+  background: $blue-50;
+  color: $blue-700;
+  border-radius: $radius-full;
+  font-family: $font-display;
+  font-weight: $fw-bold;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}

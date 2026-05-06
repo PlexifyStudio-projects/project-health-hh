@@ -1,0 +1,249 @@
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/mixins" as *;
+
+.process-timeline {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  @include phone-section-padding;
+  @include phone-header-compact;
+
+  // Editorial watermark
+  &::before {
+    content: "PROCESS";
+    position: absolute;
+    bottom: -3rem;
+    left: -1rem;
+    font-family: $font-display;
+    font-weight: $fw-extra;
+    font-size: clamp(8rem, 22vw, 22rem);
+    letter-spacing: -0.07em;
+    color: rgba($ink, 0.025);
+    pointer-events: none;
+    z-index: 0;
+    line-height: 1;
+    white-space: nowrap;
+
+    // Phone — drop the giant watermark; saves render cost and visual noise.
+    @include bp-down(md) { display: none; }
+  }
+}
+
+// SVG connector — sits behind the cards on desktop only
+.process-timeline__connector {
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  width: 84%;
+  pointer-events: none;
+  z-index: 0;
+  display: none;
+
+  @include bp(lg) {
+    display: block;
+    top: 84px;
+    height: 60px;
+  }
+}
+
+.process-timeline__connector-path {
+  filter: drop-shadow(0 0 8px rgba($blue-500, 0.25));
+}
+
+.process-timeline__list {
+  position: relative;
+  z-index: 1;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: $space-5;
+  grid-template-columns: 1fr;
+
+  // 2x2 magazine spread at tablet — 4 cards on a comfortable 2-col grid
+  // with extra horizontal gap to make the layout feel intentional.
+  @include bp(md) {
+    grid-template-columns: repeat(2, 1fr);
+    @include bp-down(lg) {
+      gap: $space-5 $space-6;
+    }
+  }
+  @include bp(lg) { grid-template-columns: repeat(4, 1fr); gap: $space-4; }
+}
+
+.process-card {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: $space-3;
+  background: rgba($white, 0.85);
+  backdrop-filter: blur(14px);
+  border-radius: $radius-2xl;
+  padding: $space-5;
+  border: 1.5px solid rgba($white, 0.95);
+  box-shadow: $shadow-md;
+  transition:
+    transform $duration-base $ease-out-expo,
+    box-shadow $duration-base $ease-soft,
+    border-color $duration-base $ease-soft;
+  isolation: isolate;
+  overflow: hidden;
+  min-height: 290px;
+
+  // Phone — thin compact entries: drop fixed min-height, smaller padding,
+  // tighter gaps, smaller radius. The big-num/ring are hidden below.
+  @include bp-down(md) {
+    min-height: 0;
+    padding: $space-4;
+    gap: 6px;
+    border-radius: $radius-xl;
+    box-shadow: $shadow-sm;
+  }
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      radial-gradient(circle at 100% 0%, rgba($blue-300, 0.16), transparent 50%);
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.4s $ease-soft;
+  }
+
+  &:hover {
+    transform: translateY(-8px);
+    box-shadow: $shadow-xl;
+    border-color: $blue-200;
+    &::before { opacity: 1; }
+  }
+}
+
+.process-card__big-num {
+  position: absolute;
+  top: -1.2rem;
+  right: -0.6rem;
+  font-family: $font-display;
+  font-weight: $fw-extra;
+  font-size: 8.5rem;
+  letter-spacing: -0.06em;
+  line-height: 1;
+  color: rgba($blue-700, 0.07);
+  pointer-events: none;
+  z-index: -1;
+  user-select: none;
+  will-change: transform;
+
+  @include bp-down(md) { display: none; }
+}
+
+.process-card__step {
+  display: flex;
+  align-items: center;
+  gap: $space-3;
+}
+
+.process-card__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px; height: 56px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, $blue-500, $green-500);
+  color: $white;
+  box-shadow: $shadow-glow-blue;
+  flex-shrink: 0;
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: -4px;
+    border: 1.5px dashed rgba($blue-500, 0.4);
+    border-radius: 50%;
+    animation: process-rotate 16s linear infinite;
+
+    // Phone — drop the rotating ring; quieter, less battery drain.
+    @include bp-down(md) { display: none; }
+  }
+
+  // Phone — smaller icon to match compact entry height.
+  @include bp-down(md) {
+    width: 40px; height: 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba($blue-500, 0.18);
+  }
+}
+
+@keyframes process-rotate {
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .process-card__icon::after { animation: none; }
+}
+
+.process-card__num {
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+
+  small {
+    font-family: $font-display;
+    font-weight: $fw-bold;
+    letter-spacing: 0.16em;
+    font-size: 0.62rem;
+    text-transform: uppercase;
+    color: $gray-500;
+  }
+  strong {
+    font-family: $font-display;
+    font-weight: $fw-extra;
+    font-size: 1.5rem;
+    letter-spacing: -0.02em;
+    color: $ink;
+    margin-top: 2px;
+  }
+}
+
+.process-card__title {
+  font-family: $font-display;
+  font-weight: $fw-extra;
+  font-size: 1.25rem;
+  letter-spacing: -0.02em;
+  margin: 0;
+  color: $ink;
+
+  @include bp-down(md) { font-size: 1.05rem; }
+}
+
+.process-card__description {
+  color: $ink-soft;
+  font-size: 0.95rem;
+  margin: 0;
+  line-height: 1.55;
+  flex: 1;
+
+  @include bp-down(md) {
+    font-size: 0.88rem;
+    line-height: 1.45;
+  }
+}
+
+.process-card__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  align-self: flex-start;
+  padding: 0.3rem 0.65rem;
+  background: $blue-50;
+  color: $blue-700;
+  border-radius: $radius-full;
+  font-family: $font-display;
+  font-weight: $fw-bold;
+  font-size: 0.66rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-top: $space-2;
+}

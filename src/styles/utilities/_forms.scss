@@ -1,0 +1,133 @@
+@use "../abstracts/variables" as *;
+@use "../abstracts/mixins" as *;
+
+.form-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+
+.form-label {
+  font-family: $font-display;
+  font-weight: $fw-semibold;
+  font-size: 0.86rem;
+  color: $ink;
+  letter-spacing: -0.005em;
+}
+
+.form-input {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  border-radius: $radius-md;
+  border: 1.5px solid $gray-200;
+  background: $white;
+  font-family: $font-body;
+  font-size: 1rem;
+  color: $ink;
+  min-height: 44px;
+  transition: border-color $duration-fast, box-shadow $duration-fast, background-color $duration-fast;
+
+  // Prevent iOS Safari from auto-zooming when focusing inputs (<16px font size triggers it).
+  @include bp-down(md) { font-size: 16px; }
+
+  &::placeholder { color: $gray-400; }
+
+  &:focus {
+    outline: 0;
+    border-color: $blue-500;
+    box-shadow: 0 0 0 3px rgba($blue-500, 0.18);
+    background: $white;
+  }
+
+  &:hover:not(:focus) { border-color: $gray-300; }
+
+  &[aria-invalid="true"] {
+    border-color: $danger;
+    box-shadow: 0 0 0 3px rgba($danger, 0.12);
+  }
+}
+
+textarea.form-input {
+  resize: vertical;
+  min-height: 120px;
+  line-height: 1.5;
+}
+
+select.form-input {
+  appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 14 14'><path d='M3 5l4 4 4-4' stroke='%231B2A3A' stroke-width='1.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  padding-right: 2.5rem;
+  cursor: pointer;
+}
+
+.form-error {
+  font-size: 0.82rem;
+  color: $danger;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+
+  &::before {
+    content: "⚠";
+    font-size: 0.9rem;
+  }
+}
+
+.form-grid {
+  display: grid;
+  gap: $space-4;
+  grid-template-columns: 1fr;
+  @include bp(md) { grid-template-columns: repeat(2, 1fr); }
+}
+
+.form-check {
+  display: flex;
+  align-items: flex-start;
+  gap: $space-3;
+  font-size: 0.9rem;
+  color: $ink-soft;
+  cursor: pointer;
+  padding: $space-3;
+  border-radius: $radius-md;
+  border: 1.5px solid $gray-200;
+  background: $white;
+  transition: border-color $duration-fast, background-color $duration-fast;
+
+  &:hover { border-color: $blue-300; background: $blue-50; }
+
+  input[type="checkbox"] {
+    margin-top: 4px;
+    width: 18px; height: 18px;
+    accent-color: $blue-500;
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+}
+
+// Submit area: stack the submit button full-width on mobile so it's always tappable.
+// On phone the actions become sticky at the form bottom, with a soft backdrop
+// so the primary submit is always thumb-reachable.
+.form-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: $space-3;
+  margin-top: $space-2;
+
+  @include bp-down(md) {
+    flex-direction: column-reverse;
+    align-items: stretch;
+    position: sticky;
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 0.5rem);
+    z-index: 5;
+    margin-inline: -$space-3;
+    padding: $space-3;
+    background: linear-gradient(to top, rgba($white, 0.98) 70%, rgba($white, 0));
+    backdrop-filter: blur(8px);
+
+    .button { width: 100%; justify-content: center; }
+  }
+}

@@ -1,0 +1,232 @@
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/mixins" as *;
+
+.contact {
+  padding-top: calc(#{$header-height-lg} + 3rem);
+  padding-bottom: clamp(3rem, 6vw, 5rem);
+  background:
+    radial-gradient(800px 500px at 0% 0%, $blue-50 0%, transparent 60%),
+    radial-gradient(700px 500px at 100% 100%, $green-50 0%, transparent 60%),
+    $white;
+}
+
+.contact__grid {
+  display: grid;
+  gap: clamp(2rem, 5vw, 4rem);
+  align-items: start;
+  grid-template-columns: 1fr;
+  @include bp(lg) { grid-template-columns: 1fr 1.2fr; }
+}
+
+.contact__info {
+  h1 {
+    font-size: clamp(2.4rem, 6vw, 4.5rem);
+    font-weight: $fw-extra;
+    letter-spacing: -0.03em;
+    line-height: 1.02;
+    margin: $space-3 0 $space-4;
+
+    em {
+      font-family: $font-serif;
+      font-style: italic;
+      font-weight: $fw-regular;
+      @include gradient-text($blue-600, $coral-600);
+    }
+  }
+  p { color: $ink-soft; font-size: 1.05rem; max-width: 50ch; }
+}
+
+.contact__eyebrow {
+  display: inline-block;
+  font-family: $font-display;
+  font-weight: $fw-semibold;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-size: 0.78rem;
+  color: $blue-700;
+  background: $blue-50;
+  padding: $space-2 $space-4;
+  border-radius: $radius-full;
+}
+
+.contact__list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: $space-4;
+  margin-top: $space-6;
+
+  li {
+    display: flex;
+    align-items: flex-start;
+    gap: $space-3;
+  }
+
+  span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px; height: 40px;
+    border-radius: 12px;
+    background: $blue-50;
+    color: $blue-700;
+    flex-shrink: 0;
+  }
+
+  strong {
+    display: block;
+    font-family: $font-display;
+    font-weight: $fw-bold;
+    font-size: 0.86rem;
+    color: $ink;
+    margin-bottom: 2px;
+  }
+
+  a { color: $ink-soft; text-decoration: none; }
+  a:hover { color: $blue-700; }
+}
+
+// Hours & response panel
+.contact__hours {
+  margin-top: $space-8;
+  background: $white;
+  border: 1px solid $gray-100;
+  border-radius: $radius-2xl;
+  padding: clamp(1rem, 3vw, 1.75rem);
+}
+
+.contact__hours-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: $font-display;
+  font-weight: $fw-bold;
+  font-size: 0.7rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: $blue-700;
+
+  svg { color: $blue-600; }
+}
+
+.contact__hours-title {
+  font-family: $font-display;
+  font-weight: $fw-extra;
+  font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+  letter-spacing: -0.02em;
+  margin: $space-2 0 $space-4;
+  color: $ink;
+}
+
+.contact__hours-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: $space-3;
+  padding: 0;
+  margin: 0;
+}
+
+.contact__hours-row {
+  display: flex;
+  align-items: flex-start;
+  gap: $space-3;
+  padding-top: $space-3;
+  border-top: 1px solid $gray-100;
+
+  &:first-child { padding-top: 0; border-top: 0; }
+
+  div {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  strong {
+    font-family: $font-display;
+    font-weight: $fw-bold;
+    font-size: 0.92rem;
+    color: $ink;
+  }
+
+  span {
+    font-family: $font-display;
+    font-weight: $fw-semibold;
+    font-size: 0.86rem;
+    color: $blue-700;
+  }
+
+  em {
+    font-style: normal;
+    font-size: 0.8rem;
+    color: $gray-500;
+    line-height: 1.4;
+  }
+}
+
+.contact__hours-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px; height: 32px;
+  border-radius: 10px;
+  background: $blue-50;
+  color: $blue-700;
+  flex-shrink: 0;
+}
+
+.contact__form-wrap {
+  background: $white;
+  border-radius: $radius-2xl;
+  padding: clamp(1.5rem, 3vw, 2.5rem);
+  border: 1px solid $gray-100;
+  box-shadow: $shadow-md;
+}
+
+.contact__form {
+  display: flex;
+  flex-direction: column;
+  gap: $space-4;
+
+  // Make the submit button take the full width on mobile.
+  @include bp-down(md) {
+    > .button { width: 100%; justify-content: center; }
+  }
+}
+
+// Form classes (.form-row .form-label .form-input .form-grid .form-error .form-check)
+// live in styles/utilities/_forms.scss — global utility.
+
+.contact__legal {
+  font-size: 0.82rem;
+  color: $gray-500;
+
+  a { color: $blue-700; }
+}
+
+.contact__success {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $space-3;
+
+  h2 {
+    font-family: $font-display;
+    font-weight: $fw-extra;
+    font-size: 2rem;
+    margin: 0;
+  }
+  p { color: $ink-soft; max-width: 40ch; }
+  a { color: $blue-700; }
+}
+
+.contact__success-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 72px; height: 72px;
+  border-radius: 50%;
+  background: $green-50;
+  color: $green-700;
+}

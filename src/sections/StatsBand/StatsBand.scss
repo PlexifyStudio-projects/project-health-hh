@@ -1,0 +1,101 @@
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/mixins" as *;
+
+.stats-band {
+  position: relative;
+  background:
+    radial-gradient(900px 400px at 0% 50%, $blue-50 0%, transparent 60%),
+    radial-gradient(700px 400px at 100% 50%, $green-50 0%, transparent 60%),
+    $white;
+  border-block: 1px solid $gray-100;
+  isolation: isolate;
+  overflow: hidden;
+  @include phone-section-padding;
+  @include phone-header-compact;
+}
+
+// Big editorial watermark "NUMBERS" — animated via GSAP scroll
+.stats-band__watermark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: $font-display;
+  font-weight: $fw-extra;
+  font-size: clamp(8rem, 22vw, 22rem);
+  letter-spacing: -0.07em;
+  color: rgba($ink, 0.025);
+  pointer-events: none;
+  z-index: 0;
+  white-space: nowrap;
+  line-height: 1;
+  will-change: transform;
+
+  @include bp-down(md) { display: none; }
+}
+
+.stats-band__list {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: $space-4;
+  grid-template-columns: 1fr;
+  @include bp(md) { grid-template-columns: repeat(2, 1fr); }
+  @include bp(lg) { grid-template-columns: repeat(4, 1fr); }
+
+  // Phone — 2x2 grid (cards already small enough). Halves the scroll height.
+  @include bp-down(md) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: $space-3;
+  }
+}
+
+.stats-band__item { display: flex; }
+
+.stats-band__intro {
+  margin-bottom: clamp(2rem, 4vw, 3rem);
+  text-align: center;
+}
+
+.stats-band__eyebrow {
+  display: inline-block;
+  font-family: $font-display;
+  font-weight: $fw-bold;
+  font-size: 0.7rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: $blue-700;
+  background: $blue-50;
+  padding: $space-2 $space-4;
+  border-radius: $radius-full;
+}
+
+.stats-band__badges {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: $space-2;
+  margin-top: clamp(2rem, 4vw, 3rem);
+}
+
+.stats-band__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0.4rem 0.85rem;
+  background: $white;
+  border: 1px solid $gray-100;
+  border-radius: $radius-full;
+  font-family: $font-display;
+  font-weight: $fw-semibold;
+  font-size: 0.78rem;
+  color: $ink;
+  box-shadow: $shadow-xs;
+
+  &::before {
+    content: "✓";
+    color: $green-600;
+    font-weight: $fw-bold;
+    margin-right: 4px;
+  }
+}

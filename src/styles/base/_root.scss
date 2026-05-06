@@ -1,0 +1,53 @@
+@use "../abstracts/variables" as *;
+
+:root {
+  // Re-exposed CSS custom properties (some animations/JS need them)
+  --color-blue-50: #{$blue-50};
+  --color-blue-100: #{$blue-100};
+  --color-blue-500: #{$blue-500};
+  --color-blue-700: #{$blue-700};
+  --color-blue-900: #{$blue-900};
+  --color-green-500: #{$green-500};
+  --color-coral-500: #{$coral-500};
+  --color-cream: #{$cream};
+  --color-mist: #{$mist};
+  --color-white: #{$white};
+  --color-ink: #{$ink};
+  --color-ink-soft: #{$ink-soft};
+
+  --header-h: #{$header-height-lg};
+  --container-max: #{$container-max};
+
+  --ease-out-expo: #{$ease-out-expo};
+  --ease-soft: #{$ease-soft};
+
+  color-scheme: light;
+}
+
+// =====================================================
+// Custom scrollbar — slim, gradient, brand-tinted
+// =====================================================
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #{$blue-300} transparent;
+}
+
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track {
+  background: rgba($gray-100, 0.5);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #{$blue-500}, #{$green-500} 60%, #{$coral-500});
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  border-radius: 999px;
+  transition: background 0.3s ease;
+
+  &:hover {
+    background: linear-gradient(180deg, #{$blue-600}, #{$green-600} 60%, #{$coral-600});
+    background-clip: padding-box;
+  }
+}
+::-webkit-scrollbar-corner { background: transparent; }
+

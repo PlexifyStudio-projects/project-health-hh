@@ -1,0 +1,78 @@
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/mixins" as *;
+
+.service-specialties {
+  background: $white;
+}
+
+.service-specialties__grid {
+  display: grid;
+  gap: $space-4;
+  margin-top: $space-10;
+  grid-template-columns: 1fr;
+
+  @include bp(sm) { grid-template-columns: repeat(2, 1fr); }
+  @include bp(lg) { grid-template-columns: repeat(4, 1fr); }
+}
+
+.specialty-card {
+  display: flex;
+  flex-direction: column;
+  gap: $space-2;
+  background: $white;
+  padding: $space-5;
+  border-radius: $radius-xl;
+  border: 1px solid $gray-100;
+  transition: transform $duration-base $ease-out-expo, box-shadow $duration-base $ease-soft, border-color $duration-base $ease-soft;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: auto -40% -40% auto;
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba($blue-300, 0.18), transparent 70%);
+    opacity: 0;
+    transition: opacity $duration-base $ease-soft;
+    z-index: -1;
+  }
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: $shadow-md;
+    border-color: $blue-100;
+    &::after { opacity: 1; }
+  }
+
+  h3 {
+    font-family: $font-display;
+    font-weight: $fw-bold;
+    font-size: 1rem;
+    margin: 0;
+    color: $ink;
+  }
+
+  p {
+    margin: 0;
+    color: $ink-soft;
+    font-size: 0.88rem;
+    line-height: 1.5;
+  }
+}
+
+.specialty-card__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, $blue-500, $green-500);
+  color: $white;
+  margin-bottom: $space-2;
+  box-shadow: $shadow-sm;
+}

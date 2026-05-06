@@ -1,0 +1,149 @@
+@use "sass:map";
+
+// =====================================================
+// COLOR PALETTE — Light, healthcare color psychology
+// =====================================================
+
+// Primary — Healing Blue (trust, calm, medical)
+$blue-50:  #EAF2FF;
+$blue-100: #D6E5FF;
+$blue-200: #B3CFFF;
+$blue-300: #7AAFFF;
+$blue-400: #4F95FB;
+$blue-500: #2D7FF9;
+$blue-600: #1F66D6;
+$blue-700: #1B4FB3;
+$blue-800: #133A85;
+$blue-900: #0E2A66;
+
+// Secondary — Wellness Green (healing, vitality)
+$green-50:  #E8F8EF;
+$green-100: #C8EED8;
+$green-200: #A1E3BC;
+$green-300: #6FD8A0;
+$green-400: #4DCB89;
+$green-500: #34C77B;
+$green-600: #28A767;
+$green-700: #1F8E55;
+$green-800: #186E42;
+
+// Warm Accent — Compassion Coral (humanity, warmth)
+$coral-50:  #FFF1EC;
+$coral-100: #FFDED2;
+$coral-200: #FFCAB6;
+$coral-300: #FFB59C;
+$coral-400: #FF9D80;
+$coral-500: #FF8B6B;
+$coral-600: #E96E4D;
+$coral-700: #C8543A;
+
+// Trust Gold (sparingly, for badges)
+$gold-300: #FFD984;
+$gold-500: #F6C453;
+$gold-700: #C99526;
+
+// Neutrals (light foundations)
+$white:     #FFFFFF;
+$cream:     #FAF7F2;
+$mist:      #F4F7FB;
+$gray-50:   #F8FAFC;
+$gray-100:  #EEF2F6;
+$gray-200:  #DCE3EB;
+$gray-300:  #C9D2DC;
+$gray-400:  #9DA9B7;
+$gray-500:  #6B7A8C;
+$gray-600:  #4F5C6E;
+$gray-700:  #364759;
+$ink:       #1B2A3A;
+$ink-soft:  #364759;
+
+// Semantic
+$success: $green-500;
+$warning: $gold-500;
+$danger:  #E0496A;
+$info:    $blue-500;
+
+// =====================================================
+// TYPOGRAPHY
+// =====================================================
+$font-display: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", system-ui, sans-serif;
+$font-body:    "Inter Variable", "Inter", system-ui, sans-serif;
+$font-serif:   "Fraunces Variable", "Fraunces", Georgia, serif;
+
+$fw-regular:  400;
+$fw-medium:   500;
+$fw-semibold: 600;
+$fw-bold:     700;
+$fw-extra:    800;
+
+// =====================================================
+// SPACING (8pt grid)
+// =====================================================
+$space-0:   0;
+$space-1:   0.25rem;   // 4
+$space-2:   0.5rem;    // 8
+$space-3:   0.75rem;   // 12
+$space-4:   1rem;      // 16
+$space-5:   1.25rem;   // 20
+$space-6:   1.5rem;    // 24
+$space-8:   2rem;      // 32
+$space-10:  2.5rem;    // 40
+$space-12:  3rem;      // 48
+$space-16:  4rem;      // 64
+$space-20:  5rem;      // 80
+$space-24:  6rem;      // 96
+$space-32:  8rem;      // 128
+$space-40:  10rem;     // 160
+
+// =====================================================
+// RADII
+// =====================================================
+$radius-xs: 4px;
+$radius-sm: 8px;
+$radius-md: 12px;
+$radius-lg: 20px;
+$radius-xl: 28px;
+$radius-2xl: 36px;
+$radius-full: 999px;
+
+// =====================================================
+// SHADOWS (light, soft)
+// =====================================================
+$shadow-xs: 0 1px 2px rgba(15, 36, 69, 0.04);
+$shadow-sm: 0 2px 6px rgba(15, 36, 69, 0.06);
+$shadow-md: 0 8px 24px rgba(15, 36, 69, 0.08);
+$shadow-lg: 0 20px 50px rgba(15, 36, 69, 0.10);
+$shadow-xl: 0 30px 80px rgba(15, 36, 69, 0.12);
+$shadow-glow-blue: 0 20px 60px rgba(45, 127, 249, 0.25);
+$shadow-glow-coral: 0 20px 60px rgba(255, 139, 107, 0.25);
+
+// =====================================================
+// TRANSITIONS
+// =====================================================
+$ease-out-expo:   cubic-bezier(0.19, 1, 0.22, 1);
+$ease-in-out:     cubic-bezier(0.65, 0, 0.35, 1);
+$ease-soft:       cubic-bezier(0.4, 0, 0.2, 1);
+
+$duration-fast:   180ms;
+$duration-base:   320ms;
+$duration-slow:   600ms;
+$duration-stage:  900ms;
+
+// =====================================================
+// BREAKPOINTS
+// =====================================================
+$breakpoints: (
+  sm:  480px,
+  md:  768px,
+  lg:  1024px,
+  xl:  1280px,
+  2xl: 1536px,
+);
+
+// =====================================================
+// LAYOUT
+// =====================================================
+$container-max: 1320px;
+$container-wide: 1480px;
+$header-height-lg: 96px;
+$header-height-sm: 64px;

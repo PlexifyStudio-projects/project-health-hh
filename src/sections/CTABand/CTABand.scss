@@ -1,0 +1,168 @@
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/mixins" as *;
+
+.cta-band {
+  padding-block: clamp(3rem, 6vw, 5rem);
+
+  // Phone — much tighter padding; the sticky bottom CTA bar carries the
+  // primary actions, so this band is reduced to a quieter handoff.
+  @include bp-down(md) {
+    padding-block: clamp(2rem, 5vw, 3rem);
+  }
+}
+
+.cta-band__card {
+  position: relative;
+  border-radius: $radius-2xl;
+  padding: clamp(2rem, 5vw, 4rem);
+  display: grid;
+  gap: $space-6;
+  align-items: center;
+  background: linear-gradient(135deg, $blue-50 0%, $coral-50 100%);
+  border: 1px solid $white;
+  box-shadow: $shadow-lg;
+  overflow: hidden;
+  isolation: isolate;
+
+  @include bp(md) { grid-template-columns: 1.4fr 1fr; }
+
+  // Children sit above the mesh
+  > * { position: relative; z-index: 1; }
+
+  @include bp-down(md) {
+    padding: $space-5 $space-4;
+    gap: $space-4;
+    border-radius: $radius-xl;
+  }
+}
+
+// Animated gradient mesh — independent layer so GSAP can scale it
+.cta-band__mesh {
+  position: absolute;
+  inset: -10%;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(700px 400px at 0% 0%, rgba($blue-500, 0.22) 0%, transparent 60%),
+    radial-gradient(600px 400px at 100% 100%, rgba($coral-500, 0.22) 0%, transparent 60%),
+    radial-gradient(500px 320px at 30% 80%, rgba($green-500, 0.15) 0%, transparent 60%),
+    radial-gradient(400px 280px at 80% 20%, rgba($gold-500, 0.12) 0%, transparent 60%);
+  background-size: 200% 200%, 220% 220%, 180% 180%, 200% 200%;
+  background-position: 0% 0%, 100% 100%, 0% 100%, 100% 0%;
+  animation: cta-mesh 18s ease-in-out infinite alternate;
+  will-change: background-position, transform;
+}
+
+@keyframes cta-mesh {
+  0%   {
+    background-position: 0% 0%, 100% 100%, 0% 100%, 100% 0%;
+  }
+  50%  {
+    background-position: 30% 20%, 70% 80%, 20% 60%, 80% 30%;
+  }
+  100% {
+    background-position: 60% 40%, 50% 50%, 40% 30%, 60% 60%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cta-band__mesh {
+    animation: none;
+  }
+}
+
+.cta-band__eyebrow {
+  display: inline-block;
+  font-family: $font-display;
+  font-weight: $fw-bold;
+  font-size: 0.7rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: $coral-700;
+  margin-bottom: $space-3;
+}
+
+.cta-band__phone {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0.7rem 1.1rem;
+  background: rgba($white, 0.7);
+  border: 1.5px solid $gray-200;
+  border-radius: $radius-full;
+  text-decoration: none;
+  color: $ink;
+  font-family: $font-display;
+  font-weight: $fw-bold;
+  font-size: 0.9rem;
+  transition: all $duration-fast $ease-soft;
+
+  span { display: inline-flex; flex-direction: column; line-height: 1.1; }
+  em {
+    font-style: normal;
+    font-size: 0.62rem;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: $green-700;
+    font-weight: $fw-bold;
+  }
+  svg { color: $blue-700; }
+
+  &:hover { border-color: $blue-300; transform: translateY(-1px); }
+}
+
+.cta-band__title {
+  font-family: $font-display;
+  font-weight: $fw-extra;
+  font-size: clamp(2rem, 4vw, 3rem);
+  letter-spacing: -0.03em;
+  margin: 0 0 $space-3;
+  line-height: 1.05;
+  color: $ink;
+
+  em {
+    font-family: $font-serif;
+    font-style: italic;
+    font-weight: $fw-regular;
+    @include gradient-text($blue-600, $coral-600);
+  }
+
+  @include bp-down(md) {
+    font-size: 1.5rem;
+    margin-bottom: $space-2;
+  }
+}
+
+.cta-band__description {
+  font-size: 1.05rem;
+  color: $ink-soft;
+  max-width: 50ch;
+
+  @include bp-down(md) {
+    font-size: 0.92rem;
+    line-height: 1.5;
+  }
+}
+
+.cta-band__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-3;
+  align-items: center;
+  @include bp(md) { justify-content: flex-end; }
+
+  @include bp-down(md) {
+    flex-direction: column;
+    align-items: stretch;
+    gap: $space-2;
+
+    .button { width: 100%; justify-content: center; }
+    .cta-band__phone { display: none; } // sticky bar already covers Call
+  }
+}
+
+// Magnetic wrapper — needs to be inline-block so transforms work cleanly
+.cta-band__magnet {
+  display: inline-flex;
+  will-change: transform;
+}

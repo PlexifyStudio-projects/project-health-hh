@@ -1,0 +1,205 @@
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/mixins" as *;
+
+.services-bundle__grid {
+  display: grid;
+  gap: $space-5;
+  margin-top: $space-12;
+  grid-template-columns: 1fr;
+
+  @include bp(md) { grid-template-columns: repeat(2, 1fr); }
+  @include bp(xl) { grid-template-columns: repeat(3, 1fr); }
+}
+
+.services-bundle__card {
+  display: flex;
+  flex-direction: column;
+  gap: $space-5;
+  background: $white;
+  border-radius: $radius-2xl;
+  padding: $space-6;
+  border: 1px solid $gray-100;
+  box-shadow: $shadow-sm;
+  transition: transform $duration-base $ease-out-expo, box-shadow $duration-base $ease-soft, border-color $duration-base $ease-soft;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: $shadow-md;
+    border-color: $blue-100;
+  }
+}
+
+.services-bundle__head {
+  display: flex;
+  flex-direction: column;
+  gap: $space-2;
+}
+
+.services-bundle__chip {
+  display: inline-flex;
+  align-self: flex-start;
+  padding: 0.3rem 0.7rem;
+  background: $coral-50;
+  color: $coral-700;
+  border-radius: $radius-full;
+  font-family: $font-display;
+  font-weight: $fw-bold;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.services-bundle__desc {
+  font-family: $font-serif;
+  font-style: italic;
+  font-size: 1rem;
+  color: $ink;
+  margin: 0;
+  max-width: 30ch;
+}
+
+.services-bundle__diagram {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: $space-3;
+  padding: $space-4;
+  background: linear-gradient(180deg, $blue-50, transparent 60%);
+  border-radius: $radius-xl;
+  border: 1px dashed $blue-100;
+}
+
+.services-bundle__primary {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: center;
+  text-align: center;
+  padding: $space-3 $space-4;
+  background: $white;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-sm;
+  border: 1px solid $blue-100;
+
+  strong {
+    font-family: $font-display;
+    font-weight: $fw-bold;
+    font-size: 0.95rem;
+    color: $ink;
+  }
+
+  em {
+    font-style: normal;
+    font-size: 0.78rem;
+    color: $ink-soft;
+  }
+}
+
+.services-bundle__primary-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, $blue-500, $green-500);
+  color: $white;
+  margin-bottom: 4px;
+}
+
+.services-bundle__lines {
+  display: flex;
+  flex-direction: column;
+  gap: $space-2;
+  position: relative;
+  padding-left: $space-4;
+}
+
+.services-bundle__node {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: $space-3;
+  padding: $space-2 $space-3;
+  background: $white;
+  border-radius: $radius-md;
+  border: 1px solid $gray-100;
+}
+
+.services-bundle__line {
+  position: absolute;
+  left: calc(#{-$space-4} + 2px);
+  top: 50%;
+  width: $space-3;
+  height: 2px;
+  background: $blue-200;
+  border-radius: 999px;
+
+  &::before {
+    content: "";
+    position: absolute;
+    left: -$space-1;
+    top: -3px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: $green-500;
+    box-shadow: 0 0 0 3px rgba($green-500, 0.18);
+  }
+}
+
+.services-bundle__node-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 10px;
+  background: $green-50;
+  color: $green-700;
+  flex-shrink: 0;
+}
+
+.services-bundle__node-body {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+
+  strong {
+    font-family: $font-display;
+    font-weight: $fw-semibold;
+    font-size: 0.85rem;
+    color: $ink;
+  }
+
+  em {
+    font-style: normal;
+    font-size: 0.74rem;
+    color: $ink-soft;
+  }
+}
+
+.services-bundle__foot {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-top: $space-3;
+  border-top: 1px solid $gray-100;
+}
+
+.services-bundle__outcome-label {
+  font-family: $font-display;
+  font-weight: $fw-bold;
+  font-size: 0.66rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: $gray-500;
+}
+
+.services-bundle__outcome {
+  font-family: $font-display;
+  font-weight: $fw-extra;
+  font-size: 1rem;
+  letter-spacing: -0.01em;
+  color: $blue-700;
+}

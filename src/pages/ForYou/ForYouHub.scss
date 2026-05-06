@@ -1,0 +1,181 @@
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/mixins" as *;
+
+.for-you-hero {
+  padding-top: calc(#{$header-height-lg} + 3rem);
+  padding-bottom: clamp(2.5rem, 5vw, 4rem);
+  background:
+    radial-gradient(900px 500px at 50% 0%, $coral-50 0%, transparent 65%),
+    radial-gradient(700px 400px at 100% 100%, $blue-50 0%, transparent 60%),
+    $white;
+  text-align: center;
+
+  h1 {
+    font-size: clamp(2.4rem, 6vw, 4.5rem);
+    font-weight: $fw-extra;
+    letter-spacing: -0.03em;
+    line-height: 1.02;
+    margin: $space-4 auto $space-4;
+    max-width: 22ch;
+
+    em {
+      font-family: $font-serif;
+      font-style: italic;
+      font-weight: $fw-regular;
+      @include gradient-text($blue-600, $coral-600);
+    }
+  }
+  p {
+    font-size: 1.1rem;
+    color: $ink-soft;
+    max-width: 60ch;
+    margin: 0 auto;
+  }
+
+  @include bp-down(md) {
+    padding-top: calc(#{$header-height-sm} + 1rem);
+    padding-bottom: clamp(1.5rem, 5vw, 2.5rem);
+
+    h1 { font-size: clamp(2rem, 8vw, 2.4rem); margin-block: $space-3; }
+    p  { font-size: 0.95rem; }
+  }
+}
+
+.for-you-hero__eyebrow {
+  display: inline-block;
+  font-family: $font-display;
+  font-weight: $fw-semibold;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-size: 0.78rem;
+  color: $coral-700;
+  background: $coral-50;
+  padding: $space-2 $space-4;
+  border-radius: $radius-full;
+}
+
+.for-you-hero__quicks {
+  list-style: none;
+  display: grid;
+  gap: $space-2;
+  margin: $space-6 auto 0;
+  max-width: 980px;
+  text-align: left;
+  grid-template-columns: 1fr;
+
+  @include bp(md) { grid-template-columns: repeat(2, 1fr); }
+  @include bp(lg) { grid-template-columns: repeat(5, 1fr); }
+}
+
+.for-you-hero__quick {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: $space-3 $space-4;
+  background: $white;
+  border-radius: $radius-lg;
+  border: 1px solid $gray-100;
+  text-decoration: none;
+  color: $ink;
+  position: relative;
+  transition: transform $duration-base $ease-out-expo, border-color $duration-base, box-shadow $duration-base;
+
+  svg {
+    position: absolute;
+    top: $space-3;
+    right: $space-3;
+    color: $blue-600;
+    opacity: 0;
+    transition: opacity $duration-fast, transform $duration-fast;
+  }
+
+  &:hover {
+    transform: translateY(-3px);
+    border-color: $blue-200;
+    box-shadow: $shadow-sm;
+
+    svg { opacity: 1; transform: translate(2px, -2px); }
+  }
+}
+
+.for-you-hero__quick-label {
+  font-family: $font-display;
+  font-weight: $fw-bold;
+  font-size: 0.92rem;
+  color: $ink;
+  padding-right: 1.4rem;
+}
+
+.for-you-hero__quick-desc {
+  font-size: 0.78rem;
+  color: $gray-500;
+  line-height: 1.4;
+}
+
+// Stats
+.for-you-stats__list {
+  display: grid;
+  gap: $space-4;
+  grid-template-columns: 1fr;
+  @include bp(md) { grid-template-columns: repeat(2, 1fr); }
+  @include bp(lg) { grid-template-columns: repeat(4, 1fr); }
+}
+
+.for-you-stats__item { display: flex; }
+
+// Why Plexify pillars
+.for-you-why__grid {
+  display: grid;
+  gap: $space-4;
+  grid-template-columns: 1fr;
+  @include bp(md) { grid-template-columns: repeat(2, 1fr); }
+  @include bp(lg) { grid-template-columns: repeat(5, 1fr); }
+}
+
+.for-you-why__card {
+  background: $white;
+  border: 1px solid $gray-100;
+  border-radius: $radius-xl;
+  padding: $space-5;
+  display: flex;
+  flex-direction: column;
+  gap: $space-2;
+  transition: transform $duration-base $ease-out-expo, border-color $duration-base;
+
+  &:hover {
+    transform: translateY(-3px);
+    border-color: $blue-200;
+  }
+}
+
+.for-you-why__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, $blue-500, $coral-500);
+  color: $white;
+  margin-bottom: $space-2;
+}
+
+.for-you-why__title {
+  font-family: $font-display;
+  font-weight: $fw-bold;
+  font-size: 1rem;
+  margin: 0;
+  color: $ink;
+}
+
+.for-you-why__desc {
+  font-size: 0.9rem;
+  color: $ink-soft;
+  margin: 0;
+  line-height: 1.55;
+}
+
+.for-you-why__cta {
+  margin-top: $space-6;
+  display: flex;
+  justify-content: center;
+}

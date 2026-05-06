@@ -1,0 +1,26 @@
+@use "../abstracts/variables" as *;
+@use "../abstracts/mixins" as *;
+
+.section {
+  padding-block: clamp(4rem, 8vw, 8rem);
+
+  // Phone — universal compact section padding so every section breathes less.
+  // This single change cuts perceived scroll length materially across the site.
+  @include bp-down(md) {
+    padding-block: clamp(2rem, 5vw, 3rem);
+  }
+}
+
+.section--tight {
+  padding-block: clamp(3rem, 6vw, 5rem);
+
+  @include bp-down(md) {
+    padding-block: clamp(1.5rem, 4vw, 2.5rem);
+  }
+}
+
+.section--bg-mist  { background: $mist; }
+.section--bg-cream { background: $cream; }
+.section--bg-blue  { background: $blue-50; }
+.section--bg-coral { background: $coral-50; }
+.section--bg-green { background: $green-50; }

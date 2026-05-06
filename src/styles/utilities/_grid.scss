@@ -1,0 +1,11 @@
+@use "../abstracts/variables" as *;
+@use "../abstracts/mixins" as *;
+
+.grid {
+  display: grid;
+  gap: $space-6;
+}
+
+.grid--cols-2 { grid-template-columns: 1fr; @include bp(md) { grid-template-columns: repeat(2, 1fr); } }
+.grid--cols-3 { grid-template-columns: 1fr; @include bp(md) { grid-template-columns: repeat(2, 1fr); } @include bp(lg) { grid-template-columns: repeat(3, 1fr); } }
+.grid--cols-4 { grid-template-columns: 1fr; @include bp(md) { grid-template-columns: repeat(2, 1fr); } @include bp(lg) { grid-template-columns: repeat(4, 1fr); } }

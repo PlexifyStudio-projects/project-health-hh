@@ -1,0 +1,35 @@
+@use "@/styles/abstracts/variables" as *;
+
+.badge-trust {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-3;
+  padding: $space-2 $space-4 $space-2 $space-3;
+  background: $white;
+  border: 1px solid $gray-100;
+  border-radius: $radius-full;
+  box-shadow: $shadow-xs;
+  white-space: nowrap;
+}
+
+.badge-trust__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: $green-50;
+  color: $green-700;
+}
+
+.badge-trust__label {
+  font-family: $font-display;
+  font-weight: $fw-semibold;
+  font-size: 0.86rem;
+  color: $ink;
+}
+
+.badge-trust__sub {
+  font-size: 0.78rem;
+  color: $gray-500;
+}

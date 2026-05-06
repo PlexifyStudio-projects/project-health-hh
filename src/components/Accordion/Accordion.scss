@@ -1,0 +1,98 @@
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/mixins" as *;
+
+.accordion {
+  display: flex;
+  flex-direction: column;
+  gap: $space-3;
+
+  @include bp-down(md) {
+    gap: $space-2;
+  }
+}
+
+.accordion__item {
+  background: $white;
+  border: 1px solid $gray-100;
+  border-radius: $radius-lg;
+  overflow: hidden;
+  transition: border-color $duration-base $ease-soft, box-shadow $duration-base $ease-soft;
+
+  &.is-open {
+    border-color: $blue-200;
+    box-shadow: $shadow-sm;
+  }
+}
+
+.accordion__heading { margin: 0; }
+
+.accordion__trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $space-4;
+  width: 100%;
+  padding: clamp(1rem, 2vw, 1.5rem);
+  text-align: left;
+  font-family: $font-display;
+  font-weight: $fw-semibold;
+  font-size: clamp(1rem, 1.5vw, 1.1rem);
+  color: $ink;
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+  min-height: 44px;
+  @include focus-ring;
+
+  @include bp-down(md) {
+    padding: 0.85rem 1rem;
+    gap: $space-3;
+    font-size: 0.95rem;
+  }
+}
+
+.accordion__question { flex: 1; }
+
+.accordion__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: $blue-50;
+  color: $blue-700;
+  flex-shrink: 0;
+  transition: background-color $duration-fast $ease-soft, color $duration-fast $ease-soft;
+  will-change: transform;
+
+  .is-open & {
+    background: $coral-500;
+    color: $white;
+    // Rotation is driven by GSAP — color change still uses CSS.
+  }
+}
+
+// Panel — height/opacity controlled by GSAP (initial state set by JS).
+.accordion__panel {
+  overflow: hidden;
+  // No CSS transition; GSAP owns this property.
+}
+
+.accordion__answer {
+  padding: 0 clamp(1rem, 2vw, 1.5rem) clamp(1rem, 2vw, 1.5rem);
+  color: $ink-soft;
+  font-size: 1rem;
+  line-height: 1.7;
+
+  @include bp-down(md) {
+    padding: 0 1rem 0.85rem;
+    font-size: 0.92rem;
+    line-height: 1.55;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .accordion__icon {
+    transition: none;
+  }
+}

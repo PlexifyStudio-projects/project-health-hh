@@ -1,0 +1,26 @@
+@use "@/styles/abstracts/variables" as *;
+
+.card {
+  background: $white;
+  border-radius: $radius-xl;
+  padding: clamp(1.25rem, 3vw, 2rem);
+  border: 1px solid $gray-100;
+  box-shadow: $shadow-xs;
+  transition: transform $duration-base $ease-out-expo, box-shadow $duration-base $ease-soft;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: $shadow-md;
+  }
+}
+
+.card--feature {
+  background: linear-gradient(135deg, $white 0%, $blue-50 100%);
+  border-color: rgba($blue-300, 0.3);
+}
+
+.card--ghost {
+  background: transparent;
+  border: 1px dashed $gray-300;
+  box-shadow: none;
+}

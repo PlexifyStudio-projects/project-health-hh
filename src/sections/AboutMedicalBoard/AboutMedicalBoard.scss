@@ -1,0 +1,200 @@
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/mixins" as *;
+
+.about-board__layout {
+  display: grid;
+  gap: clamp(2rem, 5vw, 4rem);
+  grid-template-columns: 1fr;
+  margin-top: $space-12;
+
+  @include bp(lg) {
+    grid-template-columns: 1.1fr 1fr;
+    align-items: stretch;
+  }
+}
+
+.about-board__cmo {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $space-5;
+  background: $white;
+  border-radius: $radius-2xl;
+  padding: $space-6;
+  border: 1px solid $gray-100;
+  box-shadow: $shadow-md;
+
+  @include bp(md) {
+    grid-template-columns: 240px 1fr;
+    gap: $space-6;
+    padding: $space-8;
+  }
+}
+
+.about-board__cmo-photo {
+  position: relative;
+  border-radius: $radius-xl;
+  overflow: hidden;
+  aspect-ratio: 4 / 5;
+  box-shadow: $shadow-md;
+
+  img {
+    width: 100%; height: 100%; object-fit: cover;
+  }
+}
+
+.about-board__cmo-badge {
+  position: absolute;
+  bottom: $space-3;
+  left: $space-3;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0.4rem 0.7rem;
+  background: rgba($white, 0.92);
+  backdrop-filter: blur(8px);
+  color: $blue-700;
+  font-family: $font-display;
+  font-weight: $fw-bold;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  border-radius: $radius-full;
+  box-shadow: $shadow-sm;
+}
+
+.about-board__cmo-body {
+  display: flex;
+  flex-direction: column;
+  gap: $space-4;
+  position: relative;
+}
+
+.about-board__cmo-quote-mark {
+  color: $blue-300;
+  margin-bottom: -$space-2;
+}
+
+.about-board__cmo-quote {
+  font-family: $font-serif;
+  font-style: italic;
+  font-weight: $fw-regular;
+  font-size: clamp(1.1rem, 1.6vw, 1.35rem);
+  line-height: 1.45;
+  color: $ink;
+  margin: 0;
+  border-left: 3px solid $blue-300;
+  padding-left: $space-4;
+
+  em {
+    @include gradient-text($blue-600, $green-600);
+    font-style: italic;
+  }
+}
+
+.about-board__cmo-meta {
+  display: flex;
+  flex-direction: column;
+  gap: $space-2;
+
+  strong {
+    font-family: $font-display;
+    font-weight: $fw-extra;
+    font-size: 1.1rem;
+    color: $ink;
+  }
+
+  > span {
+    font-family: $font-display;
+    font-weight: $fw-semibold;
+    font-size: 0.86rem;
+    color: $blue-700;
+  }
+
+  p {
+    margin: 0;
+    color: $ink-soft;
+    font-size: 0.92rem;
+  }
+}
+
+.about-board__cmo-creds {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-2;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  li {
+    padding: 0.2rem 0.6rem;
+    background: $gray-100;
+    color: $ink-soft;
+    border-radius: $radius-full;
+    font-family: $font-display;
+    font-weight: $fw-semibold;
+    font-size: 0.7rem;
+    letter-spacing: 0.06em;
+  }
+}
+
+.about-board__advisors {
+  display: flex;
+  flex-direction: column;
+  gap: $space-4;
+}
+
+.about-board__advisors-title {
+  font-family: $font-display;
+  font-weight: $fw-extra;
+  font-size: 1.1rem;
+  letter-spacing: -0.01em;
+  color: $ink;
+  margin: 0 0 $space-2;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.78rem;
+  color: $blue-700;
+}
+
+.about-board__advisors-grid {
+  display: grid;
+  gap: $space-3;
+  grid-template-columns: 1fr;
+
+  @include bp(sm) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.board-advisor {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: $white;
+  padding: $space-4;
+  border-radius: $radius-lg;
+  border: 1px solid $gray-100;
+  transition: transform $duration-base $ease-out-expo, box-shadow $duration-base $ease-soft;
+
+  &:hover { transform: translateY(-2px); box-shadow: $shadow-sm; }
+
+  strong {
+    font-family: $font-display;
+    font-weight: $fw-bold;
+    font-size: 0.95rem;
+    color: $ink;
+  }
+
+  em {
+    font-family: $font-serif;
+    font-style: italic;
+    font-weight: $fw-regular;
+    font-size: 0.85rem;
+    color: $blue-700;
+  }
+
+  span {
+    font-size: 0.82rem;
+    color: $ink-soft;
+  }
+}

@@ -1,0 +1,39 @@
+# https://plexifyhealth.com — robots.txt
+# Plexify Health is a Medicare-certified home health agency
+# serving California. We welcome reputable web crawlers.
+
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /legal/
+Disallow: /*.json$
+Disallow: /*?*
+
+# AI / LLM crawlers — explicit allow for transparency
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+# Image bots — surface our team and care imagery
+User-agent: Googlebot-Image
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+# Sitemap
+Sitemap: https://plexifyhealth.com/sitemap.xml

@@ -1,0 +1,64 @@
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/mixins" as *;
+
+.about-press {
+  background: $white;
+}
+
+.about-press__marquee {
+  margin-top: $space-10;
+}
+
+.press-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-3;
+  padding: $space-3 $space-5;
+  margin: 0 $space-3;
+  background: $white;
+  border: 1px solid $gray-100;
+  border-radius: $radius-xl;
+  box-shadow: $shadow-xs;
+  min-height: 64px;
+  transition: transform $duration-base $ease-out-expo, box-shadow $duration-base $ease-soft, border-color $duration-base $ease-soft;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: $shadow-md;
+    border-color: $blue-100;
+  }
+}
+
+.press-chip__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  background: $cream;
+  color: $gold-700;
+  flex-shrink: 0;
+}
+
+.press-chip__body {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+
+  strong {
+    font-family: $font-display;
+    font-weight: $fw-bold;
+    font-size: 0.95rem;
+    color: $ink;
+  }
+
+  em {
+    font-family: $font-serif;
+    font-style: italic;
+    font-weight: $fw-regular;
+    font-size: 0.82rem;
+    color: $ink-soft;
+    margin-top: 2px;
+  }
+}

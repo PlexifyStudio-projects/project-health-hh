@@ -1,0 +1,46 @@
+{
+  "name": "plexify-health",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Plexify Health — Compassionate home health care, delivered home.",
+  "homepage": "https://plexifystudio-projects.github.io/project-health-hh/",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "postbuild": "node -e \"require('fs').copyFileSync('dist/index.html','dist/404.html')\"",
+    "preview": "vite preview",
+    "lint": "eslint . --ext ts,tsx",
+    "lint:style": "stylelint \"src/**/*.scss\"",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
+  },
+  "dependencies": {
+    "@fontsource-variable/fraunces": "^5.1.0",
+    "@fontsource-variable/inter": "^5.1.0",
+    "@fontsource-variable/plus-jakarta-sans": "^5.1.0",
+    "@gsap/react": "^2.1.2",
+    "@hookform/resolvers": "^3.9.1",
+    "gsap": "^3.13.0",
+    "leaflet": "^1.9.4",
+    "lenis": "^1.3.4",
+    "lucide-react": "^0.460.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-hook-form": "^7.54.0",
+    "react-leaflet": "^5.0.0",
+    "react-router-dom": "^7.1.0",
+    "swiper": "^11.1.15",
+    "zod": "^3.24.0"
+  },
+  "devDependencies": {
+    "@types/leaflet": "^1.9.21",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@vitejs/plugin-react": "^4.3.4",
+    "gh-pages": "^6.3.0",
+    "sass-embedded": "^1.83.0",
+    "typescript": "^5.7.2",
+    "vite": "^6.0.5"
+  }
+}

@@ -1,0 +1,74 @@
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/mixins" as *;
+
+.section-header {
+  margin-bottom: clamp(2.5rem, 5vw, 4rem);
+  display: flex;
+  flex-direction: column;
+  gap: $space-4;
+
+  @include bp-down(md) {
+    margin-bottom: clamp(1.25rem, 4vw, 2rem);
+    gap: $space-3;
+  }
+}
+
+.section-header--center {
+  align-items: center;
+  text-align: center;
+
+  .section-header__description { margin-inline: auto; }
+}
+
+.section-header__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-2;
+  font-family: $font-display;
+  font-weight: $fw-semibold;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-size: 0.78rem;
+  color: $blue-700;
+  background: $blue-50;
+  padding: $space-2 $space-4;
+  border-radius: $radius-full;
+  align-self: flex-start;
+  width: fit-content;
+
+  &::before {
+    content: "";
+    width: 6px; height: 6px; border-radius: 50%;
+    background: $coral-500;
+  }
+
+  @include bp-down(md) {
+    font-size: 0.66rem;
+    padding: 5px $space-3;
+    letter-spacing: 0.14em;
+  }
+}
+
+.section-header--center .section-header__eyebrow { align-self: center; }
+
+.section-header__title {
+  max-width: 22ch;
+
+  em {
+    font-family: $font-serif;
+    font-style: italic;
+    font-weight: $fw-regular;
+    @include gradient-text($blue-600, $green-600);
+  }
+}
+
+.section-header__description {
+  max-width: 56ch;
+  font-size: clamp(1rem, 1.6vw, 1.15rem);
+  color: $ink-soft;
+
+  @include bp-down(md) {
+    font-size: 0.92rem;
+    line-height: 1.5;
+  }
+}

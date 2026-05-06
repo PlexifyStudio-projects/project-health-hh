@@ -1,0 +1,272 @@
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/mixins" as *;
+
+.audience-grid {
+  background: $mist;
+  @include phone-section-padding;
+  @include phone-header-compact;
+}
+
+.audience-grid__list {
+  display: grid;
+  gap: $space-5;
+  grid-template-columns: 1fr;
+  @include bp(md) { grid-template-columns: repeat(2, 1fr); }
+  // Wider tablet (900-1023): 6-col base so the first row of 3 cards each
+  // span 2 cols, and the last 2 cards each span 3 cols on row two.
+  // Result: balanced 3-up + 2-up magazine spread instead of an orphan.
+  @media (min-width: 900px) and (max-width: 1023.98px) {
+    grid-template-columns: repeat(6, 1fr);
+    gap: $space-4;
+
+    > .audience-card { grid-column: span 2; }
+    > .audience-card:nth-child(4),
+    > .audience-card:nth-child(5) { grid-column: span 3; }
+  }
+  // At lg (1024px) keep 2 cols so each card retains a comfortable width.
+  // 5 cols only at xl+ where width allows.
+  @include bp(xl) { grid-template-columns: repeat(5, 1fr); }
+
+  // Phone — horizontal scroll-snap rail (1.15 cards visible, peek next).
+  @include phone-rail(78vw, 0.85rem, 1rem);
+}
+
+// Narrow tablet (768-899): bigger cards, snug min-height so the 2-col grid
+// reads like a magazine spread rather than wide-mobile cards.
+.audience-card {
+  @media (min-width: 768px) and (max-width: 899.98px) {
+    min-height: 480px;
+  }
+}
+
+// Allow card min-height to shrink on narrow phones so content paces well.
+.audience-card { @include bp-down(sm) { min-height: 0; } }
+
+.audience-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border-radius: $radius-2xl;
+  overflow: hidden;
+  background: $white;
+  border: 1.5px solid $gray-100;
+  min-height: 460px;
+  // NOTE: transform is driven by GSAP (spread reveal + breathing). We only animate
+  // shadow/opacity/border-color via CSS so we don't fight the JS-controlled matrix.
+  transition:
+    box-shadow $duration-base $ease-soft,
+    opacity $duration-base $ease-soft,
+    border-color $duration-base $ease-soft,
+    filter $duration-base $ease-soft;
+  isolation: isolate;
+  will-change: transform;
+
+  &:hover { box-shadow: $shadow-lg; }
+
+  &.is-dim {
+    opacity: 0.55;
+    filter: saturate(0.6);
+  }
+
+  // Selected (active audience) — bigger emphasis (chrome only; transform = GSAP)
+  &.is-current {
+    border-color: $ink;
+    box-shadow: 0 24px 60px rgba($ink, 0.15);
+    z-index: 2;
+  }
+}
+
+.audience-card__media {
+  position: relative;
+  aspect-ratio: 5 / 4;
+  overflow: hidden;
+  background: $blue-50;
+
+  img {
+    // Slight oversize so GSAP's ±6px parallax shift never reveals edges.
+    width: calc(100% + 24px);
+    height: calc(100% + 24px);
+    margin: -12px;
+    object-fit: cover;
+    will-change: transform;
+  }
+
+  &::after {
+    content: "";
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, transparent 50%, rgba(15, 36, 69, 0.35));
+    pointer-events: none;
+  }
+}
+
+.audience-card__body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: $space-2;
+  padding: $space-5;
+
+  @include bp-down(md) {
+    padding: $space-4;
+    gap: 6px;
+  }
+}
+
+.audience-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $space-2;
+  margin-bottom: $space-2;
+}
+
+.audience-card__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  background: $blue-50;
+  color: $blue-700;
+}
+
+.audience-card__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0.28rem 0.7rem;
+  border-radius: $radius-full;
+  font-family: $font-display;
+  font-weight: $fw-bold;
+  font-size: 0.66rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  background: $ink;
+  color: $white;
+
+  &::before {
+    content: "";
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: $green-500;
+    box-shadow: 0 0 0 3px rgba($green-500, 0.32);
+  }
+}
+
+.audience-card__title {
+  font-family: $font-display;
+  font-weight: $fw-extra;
+  font-size: 1.25rem;
+  letter-spacing: -0.02em;
+  color: $ink;
+  margin: 0;
+}
+
+.audience-card__tagline {
+  color: $ink-soft;
+  font-size: 0.92rem;
+  margin: 0;
+  flex: 1;
+}
+
+.audience-card__actions {
+  display: flex;
+  flex-direction: column;
+  gap: $space-2;
+  margin-top: auto;
+  padding-top: $space-3;
+  border-top: 1px solid $gray-100;
+}
+
+.audience-card__pick {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  width: 100%;
+  padding: 0.7rem 0.95rem;
+  min-height: 44px;
+  border: 1.5px solid $blue-300;
+  background: $blue-50;
+  color: $blue-700;
+  border-radius: $radius-md;
+  font-family: $font-display;
+  font-weight: $fw-bold;
+  font-size: 0.84rem;
+  cursor: pointer;
+  transition: all $duration-fast $ease-soft;
+
+  &:hover {
+    background: $blue-700;
+    color: $white;
+    border-color: $blue-700;
+    transform: translateY(-1px);
+  }
+  @include focus-ring;
+}
+
+.audience-card__active-mark {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0.55rem 0.85rem;
+  background: linear-gradient(135deg, $green-50, $blue-50);
+  color: $green-700;
+  border: 1.5px solid $green-300;
+  border-radius: $radius-md;
+  font-family: $font-display;
+  font-weight: $fw-bold;
+  font-size: 0.84rem;
+}
+
+.audience-card__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: $font-display;
+  font-weight: $fw-semibold;
+  font-size: 0.82rem;
+  color: $blue-700;
+  text-decoration: none;
+  padding: 0.4rem 0.4rem 0;
+
+  &:hover { color: $blue-900; gap: 6px; }
+}
+
+// Accent icon background
+.audience-card--blue  .audience-card__icon { background: $blue-50;  color: $blue-700;  }
+.audience-card--green .audience-card__icon { background: $green-50; color: $green-700; }
+.audience-card--coral .audience-card__icon { background: $coral-50; color: $coral-700; }
+.audience-card--gold  .audience-card__icon { background: rgba($gold-500, 0.15); color: $gold-700; }
+.audience-card--ink   .audience-card__icon { background: $gray-100; color: $ink; }
+
+// Accent CTA color
+.audience-card--green .audience-card__cta { color: $green-700; }
+.audience-card--coral .audience-card__cta { color: $coral-700; }
+.audience-card--gold  .audience-card__cta { color: $gold-700; }
+.audience-card--ink   .audience-card__cta { color: $ink; }
+
+// Selected state — clinical, no animations
+.audience-card.is-current {
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+    height: 4px;
+    border-radius: 0 0 999px 999px;
+    background: $ink;
+    z-index: 3;
+  }
+}
+
+.audience-card--blue.is-current::before  { background: $blue-700; }
+.audience-card--green.is-current::before { background: $green-700; }
+.audience-card--coral.is-current::before { background: $coral-600; }
+.audience-card--ink.is-current::before   { background: $ink; }
+.audience-card--gold.is-current::before  { background: $gold-700; }
+
+// Hidden glow element kept in markup but visually neutral
+.audience-card__glow { display: none; }

@@ -1,0 +1,359 @@
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/mixins" as *;
+
+// =====================================================
+// HERO
+// =====================================================
+.service-detail-hero {
+  position: relative;
+  isolation: isolate;
+  padding-top: calc(#{$header-height-lg} + 2.5rem);
+  padding-bottom: clamp(3rem, 6vw, 5rem);
+  background:
+    radial-gradient(800px 500px at 0% 0%, $blue-50 0%, transparent 65%),
+    radial-gradient(700px 500px at 100% 100%, $green-50 0%, transparent 65%),
+    $white;
+  overflow: hidden;
+
+  h1 {
+    font-size: clamp(2.4rem, 5.5vw, 4rem);
+    font-weight: $fw-extra;
+    letter-spacing: -0.035em;
+    line-height: 1.02;
+    margin: $space-3 0 $space-4;
+  }
+
+  p {
+    color: $ink-soft;
+    font-size: 1.05rem;
+    max-width: 56ch;
+    line-height: 1.55;
+    margin: 0;
+  }
+}
+
+.service-detail-hero__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: $font-display;
+  font-weight: $fw-semibold;
+  font-size: 0.86rem;
+  color: $blue-700;
+  text-decoration: none;
+  margin-bottom: $space-6;
+
+  &:hover { color: $blue-800; }
+}
+
+.service-detail-hero__head {
+  display: flex;
+  align-items: center;
+  gap: $space-3;
+  margin-bottom: $space-3;
+}
+
+.service-detail-hero__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, $blue-500, $green-500);
+  color: $white;
+  box-shadow: $shadow-glow-blue;
+}
+
+.service-detail-hero__cat {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.3rem 0.7rem;
+  background: $blue-50;
+  color: $blue-700;
+  border-radius: $radius-full;
+  font-family: $font-display;
+  font-weight: $fw-bold;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.service-detail-hero__grid {
+  display: grid;
+  gap: clamp(2rem, 5vw, 4rem);
+  align-items: center;
+  grid-template-columns: 1fr;
+
+  @include bp(lg) { grid-template-columns: 1.1fr 1fr; }
+
+  // Tablet: 2-col side-by-side magazine layout (slightly tighter than lg).
+  @include bp(md) {
+    @include bp-down(lg) {
+      grid-template-columns: 1.15fr 1fr;
+      gap: clamp(1.75rem, 3.5vw, 2.75rem);
+    }
+  }
+}
+
+.service-detail-hero__content {
+  display: flex;
+  flex-direction: column;
+  gap: $space-3;
+}
+
+.service-detail-hero__media {
+  border-radius: $radius-2xl;
+  overflow: hidden;
+  aspect-ratio: 5 / 4;
+  box-shadow: $shadow-xl;
+
+  img { width: 100%; height: 100%; object-fit: cover; }
+}
+
+.service-detail-hero__stat {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-3;
+  padding: $space-3 $space-4;
+  background: $white;
+  border-radius: $radius-xl;
+  border: 1px solid $blue-100;
+  box-shadow: $shadow-sm;
+  margin-top: $space-2;
+  align-self: flex-start;
+
+  strong {
+    font-family: $font-display;
+    font-weight: $fw-extra;
+    font-size: 1.15rem;
+    letter-spacing: -0.01em;
+    color: $blue-800;
+  }
+
+  em {
+    font-family: $font-serif;
+    font-style: italic;
+    font-size: 0.86rem;
+    color: $ink-soft;
+  }
+}
+
+.service-detail-hero__stat-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, $blue-500, $green-500);
+  color: $white;
+  flex-shrink: 0;
+}
+
+.service-detail-hero__ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-3;
+  margin-top: $space-4;
+}
+
+// =====================================================
+// FEATURES
+// =====================================================
+.service-detail-features__head {
+  display: flex;
+  flex-direction: column;
+  gap: $space-3;
+  margin: 0 0 $space-8;
+  max-width: 60ch;
+
+  h2 {
+    font-family: $font-display;
+    font-weight: $fw-extra;
+    font-size: clamp(1.7rem, 3vw, 2.4rem);
+    letter-spacing: -0.025em;
+    margin: 0;
+
+    em {
+      font-family: $font-serif;
+      font-style: italic;
+      font-weight: $fw-regular;
+      @include gradient-text($blue-600, $green-600);
+    }
+  }
+
+  p {
+    margin: 0;
+    color: $ink-soft;
+    font-size: 1rem;
+  }
+}
+
+.service-detail-features__eyebrow {
+  display: inline-block;
+  align-self: flex-start;
+  font-family: $font-display;
+  font-weight: $fw-semibold;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-size: 0.78rem;
+  color: $blue-700;
+  background: $blue-50;
+  padding: $space-2 $space-4;
+  border-radius: $radius-full;
+}
+
+.service-detail-features__list {
+  list-style: none;
+  display: grid;
+  gap: $space-3;
+  grid-template-columns: 1fr;
+  margin: 0;
+  padding: 0;
+
+  @include bp(md) { grid-template-columns: repeat(2, 1fr); }
+
+  li {
+    display: flex;
+    align-items: flex-start;
+    gap: $space-3;
+    background: $white;
+    padding: $space-4;
+    border-radius: $radius-md;
+    border: 1px solid $gray-100;
+    transition: transform $duration-base $ease-out-expo, box-shadow $duration-base $ease-soft, border-color $duration-base $ease-soft;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: $shadow-sm;
+      border-color: $green-200;
+    }
+
+    svg {
+      color: $green-600;
+      background: $green-50;
+      border-radius: 50%;
+      padding: 4px;
+      width: 26px;
+      height: 26px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+  }
+}
+
+// =====================================================
+// RELATED
+// =====================================================
+.service-detail-related__head {
+  display: flex;
+  flex-direction: column;
+  gap: $space-3;
+  margin: 0 0 $space-8;
+  max-width: 60ch;
+
+  h2 {
+    font-family: $font-display;
+    font-weight: $fw-extra;
+    font-size: clamp(1.7rem, 3vw, 2.4rem);
+    letter-spacing: -0.025em;
+    margin: 0;
+
+    em {
+      font-family: $font-serif;
+      font-style: italic;
+      font-weight: $fw-regular;
+      @include gradient-text($blue-600, $green-600);
+    }
+  }
+}
+
+.service-detail-related__eyebrow {
+  display: inline-block;
+  align-self: flex-start;
+  font-family: $font-display;
+  font-weight: $fw-semibold;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-size: 0.78rem;
+  color: $blue-700;
+  background: $blue-50;
+  padding: $space-2 $space-4;
+  border-radius: $radius-full;
+}
+
+.service-detail-related__grid {
+  display: grid;
+  gap: $space-4;
+  grid-template-columns: 1fr;
+  @include bp(md) { grid-template-columns: repeat(3, 1fr); }
+  // Narrow tablet: 2-col so cards aren't squeezed; orphan centers below.
+  @media (min-width: 768px) and (max-width: 899.98px) {
+    grid-template-columns: repeat(2, 1fr);
+
+    > .service-detail-related__card:last-child:nth-child(odd) {
+      grid-column: 1 / -1;
+      max-width: 540px;
+      justify-self: center;
+    }
+  }
+}
+
+.service-detail-related__card {
+  display: flex;
+  flex-direction: column;
+  gap: $space-2;
+  background: $white;
+  padding: $space-5;
+  border-radius: $radius-xl;
+  border: 1px solid $gray-100;
+  text-decoration: none;
+  color: inherit;
+  transition: transform $duration-base $ease-out-expo, box-shadow $duration-base $ease-soft, border-color $duration-base $ease-soft;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: $shadow-md;
+    border-color: $blue-100;
+
+    .service-detail-related__cta { gap: 10px; color: $blue-800; }
+  }
+
+  strong {
+    font-family: $font-display;
+    font-weight: $fw-bold;
+    font-size: 1.05rem;
+    color: $ink;
+  }
+
+  em {
+    font-style: normal;
+    font-size: 0.92rem;
+    color: $ink-soft;
+  }
+}
+
+.service-detail-related__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: $blue-50;
+  color: $blue-700;
+  margin-bottom: $space-2;
+}
+
+.service-detail-related__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: $space-3;
+  font-family: $font-display;
+  font-weight: $fw-semibold;
+  font-size: 0.9rem;
+  color: $blue-700;
+  transition: gap $duration-base $ease-soft, color $duration-base $ease-soft;
+}

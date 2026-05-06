@@ -1,0 +1,83 @@
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/mixins" as *;
+
+.button {
+  --bg: #{$blue-500};
+  --bg-hover: #{$blue-600};
+  --fg: #{$white};
+  --border: transparent;
+  --shadow: #{$shadow-sm};
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: $space-2;
+  font-family: $font-display;
+  font-weight: $fw-semibold;
+  letter-spacing: -0.005em;
+  border-radius: $radius-full;
+  border: 1.5px solid var(--border);
+  background: var(--bg);
+  color: var(--fg);
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  transition:
+    transform $duration-base $ease-out-expo,
+    background-color $duration-fast $ease-soft,
+    box-shadow $duration-base $ease-soft,
+    color $duration-fast $ease-soft;
+  white-space: nowrap;
+  text-decoration: none;
+
+  &:hover { background: var(--bg-hover); }
+  &:active { transform: translateY(1px); }
+  @include focus-ring($coral-500);
+}
+
+.button__label {
+  display: inline-block;
+  line-height: 1;
+}
+
+.button__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  svg { width: 1.1em; height: 1.1em; }
+}
+
+// Sizes
+.button--sm { padding: 0.55rem 1rem; font-size: 0.86rem; }
+.button--md { padding: 0.85rem 1.4rem; font-size: 0.95rem; }
+.button--lg { padding: 1.05rem 1.85rem; font-size: 1rem; }
+
+// Variants
+.button--primary {
+  --bg: #{$coral-500};
+  --bg-hover: #{$coral-600};
+  --shadow: #{$shadow-glow-coral};
+}
+
+.button--secondary {
+  --bg: #{$blue-500};
+  --bg-hover: #{$blue-600};
+  --shadow: #{$shadow-glow-blue};
+}
+
+.button--outline {
+  --bg: transparent;
+  --bg-hover: #{$blue-50};
+  --fg: #{$blue-700};
+  --border: #{$blue-300};
+  --shadow: none;
+}
+
+.button--ghost {
+  --bg: transparent;
+  --bg-hover: #{$gray-100};
+  --fg: #{$ink};
+  --shadow: none;
+}
+
+.button--full { width: 100%; }

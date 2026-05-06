@@ -1,0 +1,65 @@
+@use "@/styles/abstracts/variables" as *;
+
+// Mask color is exposed as a custom property so it can be themed per-instance via the
+// `gradientMaskColor` prop. Defaults to opaque (white) — the actual mask only uses
+// black-vs-transparent transitions, but exposing the variable also drives an optional
+// edge gradient overlay below for SVG-clean fades.
+.marquee {
+  --marquee-mask-color: #{$white};
+  --marquee-mask-fade: 8%;
+
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  // SVG-driven edge mask (cleaner than a CSS gradient — no banding on subpixel offsets)
+  -webkit-mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 1' preserveAspectRatio='none'><defs><linearGradient id='g' x1='0' x2='1' y1='0' y2='0'><stop offset='0' stop-color='black' stop-opacity='0'/><stop offset='0.08' stop-color='black' stop-opacity='1'/><stop offset='0.92' stop-color='black' stop-opacity='1'/><stop offset='1' stop-color='black' stop-opacity='0'/></linearGradient></defs><rect width='100' height='1' fill='url(%23g)'/></svg>");
+          mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 1' preserveAspectRatio='none'><defs><linearGradient id='g' x1='0' x2='1' y1='0' y2='0'><stop offset='0' stop-color='black' stop-opacity='0'/><stop offset='0.08' stop-color='black' stop-opacity='1'/><stop offset='0.92' stop-color='black' stop-opacity='1'/><stop offset='1' stop-color='black' stop-opacity='0'/></linearGradient></defs><rect width='100' height='1' fill='url(%23g)'/></svg>");
+  -webkit-mask-size: 100% 100%;
+          mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+          mask-repeat: no-repeat;
+}
+
+.marquee__track {
+  display: flex;
+  width: max-content;
+  animation: marquee-loop linear infinite;
+  will-change: transform;
+}
+
+.marquee__group {
+  display: flex;
+  align-items: center;
+  gap: clamp(1.5rem, 4vw, 3rem);
+  padding-right: clamp(1.5rem, 4vw, 3rem);
+  flex-shrink: 0;
+}
+
+.marquee--slow   .marquee__track { animation-duration: 60s; }
+.marquee--normal .marquee__track { animation-duration: 40s; }
+.marquee--fast   .marquee__track { animation-duration: 22s; }
+
+// Phone — slow every marquee further so it feels calmer, less screaming.
+@media (max-width: 767.98px) {
+  .marquee--slow   .marquee__track { animation-duration: 90s; }
+  .marquee--normal .marquee__track { animation-duration: 60s; }
+  .marquee--fast   .marquee__track { animation-duration: 36s; }
+}
+
+// Direction
+.marquee--ltr .marquee__track { animation-direction: normal; }
+.marquee--rtl .marquee__track { animation-direction: reverse; }
+
+.marquee--pauseable:hover .marquee__track,
+.marquee--pauseable:focus-within .marquee__track {
+  animation-play-state: paused;
+}
+
+@keyframes marquee-loop {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee__track { animation: none; }
+}

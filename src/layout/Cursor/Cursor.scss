@@ -1,0 +1,49 @@
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/z-index" as *;
+
+@media (hover: hover) and (pointer: fine) {
+  .has-custom-cursor { cursor: none; }
+  .has-custom-cursor a,
+  .has-custom-cursor button,
+  .has-custom-cursor [data-cursor="hover"] { cursor: none; }
+  .has-custom-cursor input,
+  .has-custom-cursor textarea,
+  .has-custom-cursor select { cursor: text; }
+}
+
+.cursor {
+  position: fixed;
+  top: 0; left: 0;
+  pointer-events: none;
+  z-index: $z-cursor;
+  transform: translate3d(-50%, -50%, 0);
+  will-change: transform;
+}
+
+// Small coral dot — fixed size, color tween only on hover
+.cursor--dot {
+  width: 6px; height: 6px;
+  background: $coral-500;
+  border-radius: 50%;
+  transition: background-color 0.18s ease;
+
+  &.is-hover { background: $blue-500; }
+}
+
+// Thin blue ring — FIXED size, no resize on hover, no magnetic snap
+.cursor--ring {
+  width: 26px; height: 26px;
+  border: 1.5px solid rgba($blue-700, 0.65);
+  border-radius: 50%;
+  transition: background-color 0.18s ease, border-color 0.18s ease;
+  mix-blend-mode: multiply;
+
+  &.is-hover {
+    background: rgba($blue-500, 0.08);
+    border-color: rgba($blue-500, 0.6);
+  }
+}
+
+@media (hover: none), (prefers-reduced-motion: reduce) {
+  .cursor { display: none; }
+}

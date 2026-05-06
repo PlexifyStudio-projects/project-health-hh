@@ -1,0 +1,220 @@
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/mixins" as *;
+@use "@/styles/abstracts/z-index" as *;
+
+.section-track {
+  position: fixed;
+  top: $header-height-sm;
+  left: 0;
+  right: 0;
+  z-index: calc(#{$z-sticky} - 1);
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid rgba($gray-200, 0.6);
+  padding-block: 0.5rem;
+  transform: translateY(-110%);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.45s $ease-out-expo, opacity 0.35s $ease-soft;
+
+  &.is-visible {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  // Hide below lg — at md+ it would squeeze the 5-item pill rail.
+  @include bp-down(lg) {
+    display: none;
+  }
+}
+
+.section-track__inner {
+  display: flex;
+  align-items: center;
+  gap: clamp(1rem, 2vw, 2rem);
+}
+
+.section-track__meta {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  line-height: 1.1;
+  min-width: 168px;
+
+  // At narrower lg widths (1024–1279) the meta block was crowding the rail.
+  @media (min-width: 1024px) and (max-width: 1279px) {
+    min-width: 140px;
+  }
+}
+
+.section-track__eyebrow {
+  font-family: $font-display;
+  font-weight: $fw-bold;
+  font-size: 0.6rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: $gray-500;
+}
+
+.section-track__current {
+  font-family: $font-display;
+  font-weight: $fw-extra;
+  font-size: 1.05rem;
+  letter-spacing: -0.02em;
+  color: $ink;
+  margin-top: 2px;
+}
+
+.section-track__next {
+  font-size: 0.7rem;
+  color: $gray-500;
+  margin-top: 2px;
+
+  em {
+    font-style: normal;
+    font-weight: $fw-semibold;
+    color: $blue-700;
+  }
+}
+
+.section-track__next-arrow {
+  display: inline-block;
+  margin-right: 4px;
+  color: $coral-500;
+  animation: track-arrow 1.6s ease-in-out infinite;
+}
+
+@keyframes track-arrow {
+  0%, 100% { transform: translateY(0); opacity: 0.6; }
+  50%      { transform: translateY(2px); opacity: 1; }
+}
+
+.section-track__list {
+  position: relative;
+  display: flex;
+  align-items: center;
+  list-style: none;
+  flex: 1;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid $gray-100;
+  padding-top: 8px;
+  margin-top: -2px;
+  isolation: isolate;
+}
+
+.section-track__progress {
+  position: absolute;
+  top: 8px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, $blue-500, $green-500, $coral-500);
+  transform-origin: left center;
+  transform: scaleX(0);
+  z-index: 0;
+  border-radius: 999px;
+  pointer-events: none;
+}
+
+.section-track__ghost {
+  position: absolute;
+  top: 8px;
+  left: 0;
+  width: 14px;
+  height: 14px;
+  margin-top: -6px;
+  margin-left: -7px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba($coral-500, 0.55), rgba($coral-500, 0) 70%);
+  z-index: 0;
+  opacity: 0;
+  pointer-events: none;
+  will-change: transform, opacity, left;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .section-track__ghost { display: none; }
+}
+
+.section-track__list::before {
+  content: "";
+  position: absolute;
+  top: 8px; left: 0; right: 0;
+  height: 2px;
+  background: $gray-100;
+  border-radius: 999px;
+  z-index: -1;
+}
+
+.section-track__item {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+
+  &:first-child .section-track__link { padding-left: 0; }
+  &:last-child  .section-track__link { padding-right: 0; }
+}
+
+.section-track__link {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  text-decoration: none;
+  color: $gray-500;
+  padding: 4px 6px 0;
+  transition: color $duration-fast;
+  cursor: pointer;
+  @include focus-ring;
+
+  &:hover { color: $ink; }
+  &:hover .section-track__dot { background: $blue-100; color: $blue-700; transform: scale(1.1); }
+}
+
+.section-track__dot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: $white;
+  border: 2px solid $gray-200;
+  color: $gray-500;
+  margin-top: -3px;
+  transition: all 0.3s $ease-out-expo;
+}
+
+.section-track__label {
+  font-family: $font-display;
+  font-weight: $fw-semibold;
+  font-size: 0.7rem;
+  letter-spacing: -0.005em;
+  white-space: nowrap;
+}
+
+.section-track__item.is-past {
+  .section-track__dot { background: $green-50; border-color: $green-300; color: $green-700; }
+  .section-track__link { color: $gray-500; }
+}
+
+.section-track__item.is-active {
+  .section-track__dot {
+    background: $ink;
+    border-color: $ink;
+    color: $white;
+    box-shadow: 0 6px 18px rgba($ink, 0.25);
+    // GSAP drives the spring scale; keep transform clear here so the tween wins
+  }
+  .section-track__link  { color: $ink; }
+  .section-track__label { font-weight: $fw-bold; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .section-track__next-arrow { animation: none; }
+  .section-track__progress { transition: none; }
+  .section-track__dot { transition: none; }
+}

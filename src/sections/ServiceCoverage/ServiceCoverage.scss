@@ -1,0 +1,86 @@
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/mixins" as *;
+
+.service-coverage__panel {
+  display: grid;
+  gap: clamp(2rem, 5vw, 3rem);
+  align-items: center;
+  background: $white;
+  border-radius: $radius-2xl;
+  padding: clamp(1.5rem, 4vw, 3rem);
+  border: 1px solid $gray-100;
+  box-shadow: $shadow-md;
+  grid-template-columns: 1fr;
+
+  @include bp(lg) { grid-template-columns: 1fr 1fr; }
+}
+
+.service-coverage__intro {
+  display: flex;
+  flex-direction: column;
+  gap: $space-4;
+  align-items: flex-start;
+
+  h2 {
+    font-family: $font-display;
+    font-weight: $fw-extra;
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    letter-spacing: -0.025em;
+    margin: 0;
+    color: $ink;
+  }
+
+  p {
+    margin: 0;
+    color: $ink-soft;
+    font-size: 1rem;
+
+    em {
+      font-family: $font-serif;
+      font-style: italic;
+      color: $green-700;
+    }
+  }
+}
+
+.service-coverage__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, $blue-500, $green-500);
+  color: $white;
+  box-shadow: $shadow-glow-blue;
+}
+
+.service-coverage__plans {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $space-2;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  @include bp(sm) { grid-template-columns: repeat(2, 1fr); }
+}
+
+.service-coverage__plan {
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+  padding: $space-3 $space-4;
+  background: $gray-50;
+  border: 1px solid $gray-100;
+  border-radius: $radius-md;
+  font-family: $font-display;
+  font-weight: $fw-semibold;
+  font-size: 0.9rem;
+  color: $ink;
+
+  svg {
+    color: $green-600;
+    flex-shrink: 0;
+  }
+}

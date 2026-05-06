@@ -1,0 +1,20 @@
+@use "styles/abstracts/variables" as *;
+@use "styles/abstracts/mixins" as *;
+
+#main {
+  min-height: 60vh;
+}
+
+.route-fallback {
+  min-height: 80vh;
+  display: grid;
+  place-items: center;
+}
+
+.route-fallback__pulse {
+  width: 64px; height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, $blue-500, $green-500);
+  box-shadow: $shadow-glow-blue;
+  animation: pulse-soft 1.6s ease-in-out infinite;
+}

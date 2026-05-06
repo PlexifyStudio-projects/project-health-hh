@@ -1,0 +1,159 @@
+@use "sass:map";
+@use "variables" as *;
+
+@mixin bp($name) {
+  $value: map.get($breakpoints, $name);
+  @if $value {
+    @media (min-width: #{$value}) {
+      @content;
+    }
+  }
+}
+
+@mixin bp-down($name) {
+  $value: map.get($breakpoints, $name);
+  @if $value {
+    @media (max-width: #{$value - 0.02px}) {
+      @content;
+    }
+  }
+}
+
+@mixin reduced-motion {
+  @media (prefers-reduced-motion: reduce) {
+    @content;
+  }
+}
+
+@mixin hover {
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      @content;
+    }
+  }
+}
+
+@mixin focus-ring($color: $blue-500) {
+  &:focus-visible {
+    outline: 2px solid $color;
+    outline-offset: 3px;
+    border-radius: $radius-sm;
+  }
+}
+
+@mixin visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@mixin gradient-text($from, $to) {
+  background: linear-gradient(135deg, $from, $to);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@mixin glass($alpha: 0.7, $blur: 16px) {
+  background: rgba(255, 255, 255, $alpha);
+  backdrop-filter: blur($blur) saturate(180%);
+  -webkit-backdrop-filter: blur($blur) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+@mixin container($max: $container-max) {
+  width: 100%;
+  max-width: $max;
+  margin-inline: auto;
+  padding-inline: clamp(1rem, 4vw, 2rem);
+}
+
+// Coarse pointer (touch) — apply mobile-only tweaks regardless of viewport width.
+@mixin touch {
+  @media (pointer: coarse) {
+    @content;
+  }
+}
+
+// Tap target helper — ensures interactive elements are at least 44x44 (WCAG AAA).
+@mixin tap-target($size: 44px) {
+  min-width: $size;
+  min-height: $size;
+}
+
+// Horizontal snap-scroll row used for chip lists / pill rows on mobile.
+// Provides edge-fade mask so users see scrollable affordance.
+@mixin h-scroll-snap($pad: $space-4) {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  -webkit-overflow-scrolling: touch;
+  padding-inline: $pad;
+
+  &::-webkit-scrollbar { display: none; }
+
+  > * {
+    scroll-snap-align: center;
+    flex: 0 0 auto;
+  }
+}
+
+// =====================================================
+// MOBILE PHONE HELPERS (under 768px)
+// =====================================================
+
+// Compact section padding for phones — reduces vertical scroll dramatically.
+@mixin phone-section-padding {
+  @include bp-down(md) {
+    padding-block: clamp(2rem, 5vw, 4rem);
+  }
+}
+
+// Tighten the global SectionHeader on phones (called at the section root level).
+@mixin phone-header-compact {
+  @include bp-down(md) {
+    .section-header { margin-bottom: clamp(1.25rem, 4vw, 2rem); gap: $space-3; }
+    .section-header__title { font-size: clamp(1.6rem, 6.5vw, 2rem); }
+    .section-header__description { font-size: 0.95rem; line-height: 1.5; }
+    .section-header__eyebrow { font-size: 0.66rem; padding: $space-1 $space-3; }
+  }
+}
+
+// Horizontal scroll-snap "rail" used for service/audience/resources cards on phone.
+// Cards become flex-children; first/last gets edge padding so snap centers naturally.
+@mixin phone-rail($card-vw: 84vw, $gap: 0.85rem, $edge: 1rem) {
+  @include bp-down(md) {
+    display: flex !important;
+    grid-template-columns: none !important;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    -webkit-overflow-scrolling: touch;
+    gap: $gap;
+    padding-inline: $edge;
+    margin-inline: -$edge; // bleed to viewport edges
+    // Allow shadows to render outside the row.
+    padding-block: $space-2;
+
+    &::-webkit-scrollbar { display: none; }
+
+    > * {
+      flex: 0 0 $card-vw;
+      scroll-snap-align: center;
+      min-width: 0;
+    }
+  }
+}

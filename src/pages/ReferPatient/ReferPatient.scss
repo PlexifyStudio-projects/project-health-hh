@@ -1,0 +1,320 @@
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/mixins" as *;
+
+.refer-patient {
+  padding-top: calc(#{$header-height-lg} + 3rem);
+  padding-bottom: clamp(3rem, 6vw, 5rem);
+  background:
+    radial-gradient(700px 400px at 0% 0%, $coral-50 0%, transparent 60%),
+    radial-gradient(700px 400px at 100% 100%, $blue-50 0%, transparent 60%),
+    $white;
+
+  @include bp-down(md) {
+    padding-top: calc(#{$header-height-sm} + 1.25rem);
+    padding-bottom: clamp(2rem, 5vw, 3rem);
+  }
+}
+
+.refer-patient__grid {
+  display: grid;
+  gap: clamp(2rem, 5vw, 4rem);
+  align-items: start;
+  grid-template-columns: 1fr;
+  @include bp(lg) { grid-template-columns: 1fr 1.4fr; }
+}
+
+.refer-patient__aside {
+  h1 {
+    font-size: clamp(2.4rem, 6vw, 4.5rem);
+    font-weight: $fw-extra;
+    letter-spacing: -0.03em;
+    line-height: 1.02;
+    margin: $space-3 0 $space-4;
+
+    em {
+      font-family: $font-serif;
+      font-style: italic;
+      font-weight: $fw-regular;
+      @include gradient-text($coral-600, $blue-600);
+    }
+  }
+  p { color: $ink-soft; font-size: 1.05rem; max-width: 50ch; }
+}
+
+.refer-patient__eyebrow {
+  display: inline-block;
+  font-family: $font-display;
+  font-weight: $fw-semibold;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-size: 0.78rem;
+  color: $coral-700;
+  background: $coral-50;
+  padding: $space-2 $space-4;
+  border-radius: $radius-full;
+}
+
+.refer-patient__pills {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: $space-2;
+  margin-top: $space-5;
+
+  li {
+    display: inline-flex;
+    align-items: center;
+    gap: $space-2;
+    font-family: $font-display;
+    font-weight: $fw-semibold;
+    color: $ink;
+    font-size: 0.92rem;
+
+    svg { color: $blue-700; }
+  }
+}
+
+// Inline next-steps preview (compact)
+.refer-patient__next {
+  margin-top: $space-6;
+  padding: $space-4;
+  background: $white;
+  border: 1px solid $gray-100;
+  border-radius: $radius-xl;
+
+  ol {
+    list-style: none;
+    padding: 0;
+    margin: $space-3 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: $space-2;
+    counter-reset: rp-next;
+  }
+
+  li {
+    counter-increment: rp-next;
+    display: flex;
+    align-items: baseline;
+    gap: $space-3;
+    font-size: 0.92rem;
+    color: $ink;
+    padding-left: $space-6;
+    position: relative;
+
+    &::before {
+      content: counter(rp-next, decimal-leading-zero);
+      position: absolute;
+      left: 0;
+      top: 0;
+      font-family: $font-display;
+      font-weight: $fw-bold;
+      font-size: 0.78rem;
+      color: $coral-600;
+    }
+
+    strong {
+      font-family: $font-display;
+      font-weight: $fw-bold;
+      color: $blue-700;
+      font-size: 0.86rem;
+      flex-shrink: 0;
+    }
+    span { color: $ink-soft; }
+  }
+}
+
+.refer-patient__next-eyebrow {
+  font-family: $font-display;
+  font-weight: $fw-bold;
+  font-size: 0.7rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: $gray-500;
+}
+
+.refer-patient__form-wrap {
+  background: $white;
+  border-radius: $radius-2xl;
+  padding: clamp(1.5rem, 3vw, 2.5rem);
+  border: 1px solid $gray-100;
+  box-shadow: $shadow-md;
+}
+
+.refer-patient__form { display: flex; flex-direction: column; gap: $space-4; }
+
+.refer-patient__steps {
+  display: flex; gap: $space-4;
+  border-bottom: 1px solid $gray-100;
+  padding-bottom: $space-3;
+  margin-bottom: $space-2;
+  flex-wrap: wrap;
+
+  // Phone — compact step indicator with smaller separators.
+  @include bp-down(md) {
+    gap: $space-2;
+    padding-bottom: $space-2;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+
+    &::-webkit-scrollbar { display: none; }
+  }
+}
+
+.refer-patient__step {
+  font-family: $font-display;
+  font-weight: $fw-semibold;
+  font-size: 0.86rem;
+  color: $gray-500;
+
+  &.is-active { color: $blue-700; }
+
+  @include bp-down(md) {
+    font-size: 0.75rem;
+    white-space: nowrap;
+  }
+}
+
+.refer-patient__actions {
+  display: flex; gap: $space-3;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+
+  @include bp-down(md) {
+    flex-direction: column-reverse;
+    align-items: stretch;
+    .button { width: 100%; justify-content: center; }
+  }
+}
+
+.refer-patient__success {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $space-3;
+  padding: $space-6 $space-4;
+
+  h2 { font-family: $font-display; font-weight: $fw-extra; font-size: 2rem; margin: 0; }
+  p  { color: $ink-soft; max-width: 40ch; }
+  a  { color: $blue-700; }
+}
+
+.refer-patient__success-icon {
+  display: inline-flex;
+  align-items: center; justify-content: center;
+  width: 72px; height: 72px;
+  border-radius: 50%;
+  background: $green-50;
+  color: $green-700;
+}
+
+// What happens next
+.refer-next__list {
+  display: grid;
+  gap: $space-4;
+  grid-template-columns: 1fr;
+  @include bp(md) { grid-template-columns: repeat(2, 1fr); }
+  @include bp(lg) { grid-template-columns: repeat(4, 1fr); }
+}
+
+.refer-next__step {
+  position: relative;
+  background: $white;
+  border: 1px solid $gray-100;
+  border-radius: $radius-xl;
+  padding: $space-5;
+  display: flex;
+  flex-direction: column;
+  gap: $space-2;
+
+  h3 {
+    font-family: $font-display;
+    font-weight: $fw-bold;
+    font-size: 1.05rem;
+    margin: 0;
+    color: $ink;
+  }
+  p {
+    margin: 0;
+    color: $ink-soft;
+    font-size: 0.92rem;
+    line-height: 1.55;
+  }
+}
+
+.refer-next__num {
+  font-family: $font-display;
+  font-weight: $fw-extra;
+  font-size: 0.7rem;
+  letter-spacing: 0.16em;
+  color: $gray-400;
+}
+
+.refer-next__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px; height: 42px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, $coral-500, $blue-500);
+  color: $white;
+}
+
+.refer-next__time {
+  align-self: flex-start;
+  padding: 0.25rem 0.65rem;
+  border-radius: $radius-full;
+  background: $blue-50;
+  color: $blue-700;
+  font-family: $font-display;
+  font-weight: $fw-semibold;
+  font-size: 0.72rem;
+}
+
+// Trust strip
+.refer-trust__list {
+  list-style: none;
+  display: grid;
+  gap: $space-3;
+  grid-template-columns: 1fr;
+  @include bp(md) { grid-template-columns: repeat(3, 1fr); }
+  padding: 0;
+  margin: 0;
+}
+
+.refer-trust__item {
+  background: $white;
+  border: 1px solid $gray-100;
+  border-radius: $radius-xl;
+  padding: $space-5;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  strong {
+    font-family: $font-display;
+    font-weight: $fw-bold;
+    font-size: 1rem;
+    color: $ink;
+  }
+}
+
+.refer-trust__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px; height: 42px;
+  border-radius: 12px;
+  background: $blue-50;
+  color: $blue-700;
+  margin-bottom: $space-2;
+}
+
+.refer-trust__desc {
+  color: $ink-soft;
+  font-size: 0.92rem;
+  line-height: 1.5;
+}

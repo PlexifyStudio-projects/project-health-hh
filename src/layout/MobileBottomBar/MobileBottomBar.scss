@@ -1,0 +1,104 @@
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/mixins" as *;
+@use "@/styles/abstracts/z-index" as *;
+
+// Phone-only sticky bottom CTA bar. Hidden above md (tablet/desktop) via media query.
+.mobile-bottom-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: $z-sticky;
+  display: none; // shown only via the bp-down(md) block below
+  pointer-events: none; // children re-enable
+  padding: 0.5rem 0.75rem calc(0.5rem + env(safe-area-inset-bottom, 0px));
+  background: linear-gradient(
+    to top,
+    rgba($white, 0.96) 0%,
+    rgba($white, 0.92) 60%,
+    rgba($white, 0) 100%
+  );
+  backdrop-filter: blur(14px) saturate(180%);
+  -webkit-backdrop-filter: blur(14px) saturate(180%);
+  border-top: 1px solid rgba($gray-200, 0.6);
+  transform: translateY(0);
+  opacity: 1;
+  transition:
+    transform $duration-base $ease-out-expo,
+    opacity $duration-base $ease-soft;
+
+  &.is-hidden {
+    transform: translateY(110%);
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  @include bp-down(md) {
+    display: block;
+  }
+}
+
+.mobile-bottom-bar__inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: $space-2;
+  pointer-events: auto;
+  max-width: 560px;
+  margin-inline: auto;
+}
+
+.mobile-bottom-bar__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 48px;
+  padding: 0.7rem 0.9rem;
+  border-radius: $radius-full;
+  font-family: $font-display;
+  font-weight: $fw-bold;
+  font-size: 0.92rem;
+  letter-spacing: -0.005em;
+  text-decoration: none;
+  white-space: nowrap;
+  transition:
+    transform $duration-fast $ease-soft,
+    box-shadow $duration-fast $ease-soft,
+    background-color $duration-fast $ease-soft;
+  @include focus-ring;
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+.mobile-bottom-bar__cta--primary {
+  background: $coral-500;
+  color: $white;
+  box-shadow: 0 8px 18px rgba($coral-500, 0.35);
+
+  &:hover { background: $coral-600; }
+}
+
+.mobile-bottom-bar__cta--outline {
+  background: $white;
+  color: $blue-700;
+  border: 1.5px solid $blue-300;
+
+  svg { color: $blue-700; }
+
+  &:hover { background: $blue-50; border-color: $blue-500; }
+}
+
+// When the bottom bar is visible, give the page bottom padding so the footer
+// (and last interactive element) isn't covered. Applies via :has on a wrapper.
+@include bp-down(md) {
+  body:has(.mobile-bottom-bar:not(.is-hidden)) {
+    padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px));
+  }
+}

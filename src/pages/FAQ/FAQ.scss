@@ -1,0 +1,284 @@
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/mixins" as *;
+
+.faq-hero {
+  padding-top: calc(#{$header-height-lg} + 3rem);
+  padding-bottom: clamp(2.5rem, 5vw, 4rem);
+  background:
+    radial-gradient(700px 400px at 0% 0%, $coral-50 0%, transparent 65%),
+    radial-gradient(700px 400px at 100% 100%, $blue-50 0%, transparent 65%),
+    $white;
+
+  h1 {
+    font-size: clamp(2.2rem, 5vw, 4rem);
+    font-weight: $fw-extra;
+    letter-spacing: -0.03em;
+    line-height: 1.04;
+    margin: $space-4 0 $space-3;
+    max-width: 22ch;
+
+    em {
+      font-family: $font-serif;
+      font-style: italic;
+      font-weight: $fw-regular;
+      @include gradient-text($blue-600, $coral-600);
+    }
+  }
+  p { color: $ink-soft; font-size: 1.05rem; max-width: 60ch; margin: 0 0 $space-5; }
+}
+
+.faq-hero__eyebrow {
+  display: inline-block;
+  font-family: $font-display;
+  font-weight: $fw-semibold;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-size: 0.78rem;
+  color: $coral-700;
+  background: $coral-50;
+  padding: $space-2 $space-4;
+  border-radius: $radius-full;
+}
+
+.faq-hero__search {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+  background: $white;
+  border: 1.5px solid $gray-200;
+  border-radius: $radius-full;
+  padding: 0.65rem 1rem;
+  max-width: 520px;
+  transition: border-color $duration-fast, box-shadow $duration-fast;
+
+  &:focus-within {
+    border-color: $blue-500;
+    box-shadow: 0 0 0 3px rgba($blue-500, 0.18);
+  }
+
+  svg:first-child { color: $gray-400; flex-shrink: 0; }
+
+  input {
+    appearance: none;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    font-family: $font-body;
+    font-size: 1rem;
+    color: $ink;
+    flex: 1;
+    min-width: 0;
+
+    &::placeholder { color: $gray-400; }
+  }
+
+  button {
+    appearance: none;
+    border: 0;
+    background: $gray-100;
+    color: $ink-soft;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+
+    &:hover { background: $coral-100; color: $coral-700; }
+  }
+}
+
+.faq-hero__results {
+  margin-top: $space-3;
+  font-family: $font-display;
+  font-weight: $fw-semibold;
+  font-size: 0.86rem;
+  color: $gray-500;
+}
+
+// Layout
+.faq-list__layout {
+  display: grid;
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+  grid-template-columns: 1fr;
+  align-items: flex-start;
+
+  @include bp(lg) { grid-template-columns: 280px minmax(0, 1fr); }
+}
+
+// Sidebar
+.faq-sidebar {
+  display: none;
+
+  @include bp(lg) {
+    display: flex;
+    flex-direction: column;
+    gap: $space-4;
+    position: sticky;
+    top: calc(#{$header-height-lg} + 1rem);
+  }
+}
+
+.faq-sidebar__eyebrow {
+  font-family: $font-display;
+  font-weight: $fw-bold;
+  font-size: 0.7rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: $gray-500;
+}
+
+.faq-sidebar__list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 0;
+  margin: 0;
+}
+
+.faq-sidebar__item {
+  button {
+    appearance: none;
+    width: 100%;
+    border: 0;
+    background: $white;
+    border-radius: $radius-lg;
+    padding: $space-3 $space-4;
+    text-align: left;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    border: 1px solid $gray-100;
+    transition: border-color $duration-fast, background-color $duration-fast;
+    @include focus-ring;
+
+    &:hover {
+      border-color: $blue-200;
+      background: $blue-50;
+    }
+  }
+
+  &.is-active button {
+    background: $ink;
+    border-color: $ink;
+
+    .faq-sidebar__label,
+    .faq-sidebar__desc { color: $white; }
+
+    .faq-sidebar__count {
+      background: rgba($white, 0.18);
+      color: $white;
+    }
+  }
+}
+
+.faq-sidebar__label {
+  font-family: $font-display;
+  font-weight: $fw-bold;
+  font-size: 0.92rem;
+  color: $ink;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $space-2;
+}
+
+.faq-sidebar__count {
+  font-family: $font-display;
+  font-weight: $fw-bold;
+  font-size: 0.72rem;
+  color: $blue-700;
+  background: $blue-50;
+  padding: 2px 8px;
+  border-radius: $radius-full;
+  min-width: 28px;
+  text-align: center;
+}
+
+.faq-sidebar__desc {
+  font-size: 0.78rem;
+  color: $gray-500;
+  line-height: 1.4;
+}
+
+.faq-sidebar__help {
+  background: linear-gradient(135deg, $coral-50, $blue-50);
+  border-radius: $radius-xl;
+  padding: $space-4;
+  display: flex;
+  flex-direction: column;
+  gap: $space-2;
+  margin-top: $space-3;
+
+  p { color: $ink-soft; font-size: 0.86rem; margin: 0; line-height: 1.5; }
+}
+
+.faq-sidebar__help-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: $font-display;
+  font-weight: $fw-bold;
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: $coral-700;
+
+  svg { color: $coral-600; }
+}
+
+.faq-sidebar__help-phone {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: $font-display;
+  font-weight: $fw-bold;
+  font-size: 0.95rem;
+  color: $blue-700;
+  text-decoration: none;
+}
+
+// Main column
+.faq-list__main {
+  min-width: 0;
+}
+
+.faq-list__filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-2;
+  margin-bottom: $space-6;
+
+  @include bp(lg) { display: none; }
+}
+
+.faq-list__filter {
+  padding: 0.55rem 1.1rem;
+  border-radius: $radius-full;
+  font-family: $font-display;
+  font-weight: $fw-semibold;
+  font-size: 0.86rem;
+  background: $white;
+  border: 1px solid $gray-200;
+  color: $ink-soft;
+  cursor: pointer;
+  transition: all $duration-fast $ease-soft;
+  @include focus-ring;
+
+  &:hover { border-color: $blue-300; color: $blue-700; }
+  &.is-active { background: $ink; color: $white; border-color: $ink; }
+}
+
+.faq-list__empty {
+  text-align: center;
+  padding: $space-10 $space-4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $space-3;
+
+  p { margin: 0; color: $ink-soft; }
+}

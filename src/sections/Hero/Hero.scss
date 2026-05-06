@@ -1,0 +1,957 @@
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/mixins" as *;
+
+.hero {
+  position: relative;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: calc(#{$header-height-lg} + 4.5rem);
+  padding-bottom: 4.5rem;
+  overflow: hidden;
+  isolation: isolate;
+  background:
+    radial-gradient(1200px 700px at 100% 0%,  rgba($blue-100, 0.55) 0%,  transparent 60%),
+    radial-gradient(1000px 700px at 0% 100%,  rgba($green-50,   0.85) 0%, transparent 65%),
+    radial-gradient(700px 500px at 50% 50%,   rgba($coral-50,   0.6) 0%,  transparent 70%),
+    $cream;
+  transition: background 0.7s $ease-soft;
+
+  @include bp-down(lg) {
+    min-height: auto;
+    padding-top: calc(#{$header-height-sm} + 4.5rem);
+    padding-bottom: 6.5rem;
+  }
+
+  // Phone — hero compresses to fit ~110-115vh so the marquee teases below.
+  // The audience switcher becomes pinned at the bottom of the viewport
+  // while in-hero (see hero__switcher mobile rules).
+  @include bp-down(md) {
+    min-height: 100dvh;
+    max-height: 118dvh;
+    padding-top: calc(#{$header-height-sm} + 1.25rem);
+    padding-bottom: 5.5rem;
+    justify-content: flex-start;
+  }
+}
+
+.hero--blue   { background: radial-gradient(900px 600px at 100% 0%, rgba($blue-100, 0.7), transparent 60%), $cream; }
+.hero--green  { background: radial-gradient(900px 600px at 100% 0%, rgba($green-100, 0.7), transparent 60%), $cream; }
+.hero--coral  { background: radial-gradient(900px 600px at 100% 0%, rgba($coral-100, 0.85), transparent 60%), $cream; }
+.hero--ink    { background: radial-gradient(900px 600px at 100% 0%, rgba($gray-200, 0.7), transparent 60%), $cream; }
+.hero--gold   { background: radial-gradient(900px 600px at 100% 0%, rgba($gold-300, 0.55), transparent 60%), $cream; }
+
+.hero__mesh { position: absolute; inset: 0; pointer-events: none; z-index: -1; }
+
+.hero__blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.55;
+  animation: blob 22s ease-in-out infinite;
+}
+
+.hero__blob--1 { width: 480px; height: 480px; background: radial-gradient(circle, $blue-300, transparent 70%); top: -120px; left: -80px; }
+.hero__blob--2 { width: 420px; height: 420px; background: radial-gradient(circle, $green-300, transparent 70%); bottom: -120px; right: -60px; animation-delay: -7s; }
+.hero__blob--3 { width: 320px; height: 320px; background: radial-gradient(circle, $coral-300, transparent 70%); top: 35%; left: 50%; animation-delay: -14s; }
+
+.hero__noise {
+  position: absolute; inset: 0;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.5'/></svg>");
+  opacity: 0.32;
+  mix-blend-mode: multiply;
+}
+
+.hero__grid-lines {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(to right,  rgba($ink, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba($ink, 0.04) 1px, transparent 1px);
+  background-size: 80px 80px;
+  -webkit-mask-image: radial-gradient(circle at 50% 50%, #000 30%, transparent 75%);
+          mask-image: radial-gradient(circle at 50% 50%, #000 30%, transparent 75%);
+  opacity: 0.6;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__blob { animation: none; }
+}
+
+// =============================================
+// AUDIENCE SWITCHER
+// =============================================
+.hero__switcher {
+  position: absolute;
+  top: calc(#{$header-height-lg} + 1rem);
+  left: 0; right: 0;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $space-2;
+
+  // Phone — pinned to the bottom of the viewport while user is in hero.
+  // Sticky-fixed feel: anchored just above the marquee so users can swap
+  // audience without scrolling back. Visually compact pill row.
+  @include bp-down(md) {
+    position: absolute;
+    top: auto;
+    bottom: clamp(3rem, 9vw, 4.25rem);
+    gap: 4px;
+  }
+}
+
+.hero__switcher-label {
+  font-family: $font-display;
+  font-weight: $fw-bold;
+  font-size: 0.66rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: $gray-500;
+
+  // Phone — hide label; the pill row alone is the affordance.
+  @include bp-down(md) {
+    display: none;
+  }
+}
+
+.hero__switcher-track {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px;
+  background: rgba($white, 0.85);
+  backdrop-filter: blur(20px);
+  border: 1px solid $gray-100;
+  border-radius: $radius-full;
+  box-shadow: $shadow-sm;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 100%;
+
+  // Mobile: horizontal scroll-snap with fade-edge mask
+  @include bp-down(md) {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    width: calc(100% - 1.5rem);
+    padding: 5px 0.65rem;
+    -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 6%, #000 94%, transparent 100%);
+            mask-image: linear-gradient(90deg, transparent 0%, #000 6%, #000 94%, transparent 100%);
+
+    &::-webkit-scrollbar { display: none; }
+
+    > * { scroll-snap-align: center; flex: 0 0 auto; }
+  }
+}
+
+.hero__switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0.45rem 0.9rem 0.45rem 0.55rem;
+  border-radius: $radius-full;
+  font-family: $font-display;
+  font-weight: $fw-semibold;
+  font-size: 0.82rem;
+  color: $ink-soft;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  transition: color $duration-fast, background-color $duration-fast, transform $duration-fast;
+  white-space: nowrap;
+
+  &:hover { color: $ink; background: $gray-100; transform: translateY(-1px); }
+  @include focus-ring;
+
+  // Tap target on touch devices
+  @include touch {
+    min-height: 40px;
+    padding: 0.5rem 0.95rem 0.5rem 0.6rem;
+  }
+}
+
+.hero__switch-short { display: none; }
+
+@include bp-down(md) {
+  .hero__switch-label { display: none; }
+  .hero__switch-short { display: inline; }
+}
+
+// Narrow-tablet (768-899): use the short labels too so all 5 pills fit one
+// row without wrapping or scrolling. From 900px on, the full chip label
+// returns and the row breathes.
+@media (min-width: 768px) and (max-width: 899.98px) {
+  .hero__switch-label { display: none; }
+  .hero__switch-short { display: inline; }
+  .hero__switch { padding: 0.42rem 0.75rem 0.42rem 0.5rem; font-size: 0.78rem; }
+}
+
+.hero__switch-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px; height: 22px;
+  border-radius: 7px;
+  background: $blue-50;
+  color: $blue-700;
+  transition: all $duration-fast;
+  flex-shrink: 0;
+}
+
+.hero__switch--blue.is-active   { background: $blue-700;  color: $white; box-shadow: $shadow-glow-blue; }
+.hero__switch--green.is-active  { background: $green-700; color: $white; box-shadow: 0 12px 28px rgba($green-700, 0.3); }
+.hero__switch--coral.is-active  { background: $coral-600; color: $white; box-shadow: $shadow-glow-coral; }
+.hero__switch--ink.is-active    { background: $ink;       color: $white; box-shadow: 0 12px 28px rgba($ink, 0.32); }
+.hero__switch--gold.is-active   { background: $gold-700;  color: $white; box-shadow: 0 12px 28px rgba($gold-500, 0.3); }
+
+.hero__switch.is-active .hero__switch-icon { background: rgba(255,255,255,0.18); color: $white; }
+
+// =============================================
+// MAIN CONTENT
+// =============================================
+.hero__inner {
+  display: grid;
+  gap: clamp(2rem, 4vw, 3.5rem);
+  align-items: center;
+  grid-template-columns: 1fr;
+  width: 100%;
+  position: relative;
+  z-index: 1;
+
+  @include bp(lg) { grid-template-columns: 1.05fr 1fr; }
+
+  // Tablet: keep single column but reduce gap/padding so the stacked layout
+  // feels intentional rather than mobile-stretched. Constrain content width
+  // so reading line-length stays comfortable in landscape orientation.
+  @include bp(md) {
+    @include bp-down(lg) {
+      gap: clamp(1.75rem, 3vw, 2.5rem);
+      max-width: 920px;
+      margin-inline: auto;
+    }
+  }
+
+  // Phone — minimize gap so content + media bento share one viewport.
+  @include bp-down(md) {
+    gap: $space-4;
+    align-items: start;
+  }
+}
+
+.hero__content {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.85rem, 1.4vw, 1.15rem);
+  position: relative;
+  z-index: 2;
+
+  @include bp-down(md) {
+    gap: 0.65rem;
+  }
+}
+
+.hero__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-3;
+  padding: 0.32rem 0.85rem 0.32rem 0.32rem;
+  background: rgba($white, 0.75);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba($white, 0.95);
+  border-radius: $radius-full;
+  align-self: flex-start;
+  box-shadow: $shadow-xs;
+
+  @include bp-down(md) {
+    padding: 0.25rem 0.65rem 0.25rem 0.25rem;
+    gap: $space-2;
+  }
+}
+
+.hero__chip-num {
+  display: inline-flex;
+  align-items: center; justify-content: center;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: $ink;
+  color: $white;
+  font-family: $font-display;
+  font-weight: $fw-bold;
+  font-size: 0.66rem;
+}
+
+.hero__chip-text {
+  font-family: $font-display;
+  font-weight: $fw-semibold;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-size: 0.66rem;
+  color: $ink;
+}
+
+.hero__chip-sparkle {
+  color: $coral-500;
+  animation: pulse-soft 2s ease-in-out infinite;
+}
+
+.hero__title {
+  font-family: $font-display;
+  font-weight: $fw-extra;
+  // Lower bound 2rem prevents overflow at 320px viewports.
+  font-size: clamp(2rem, 7.5vw, 6.4rem);
+  line-height: 0.92;
+  letter-spacing: -0.045em;
+  color: $ink;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.04em;
+  text-wrap: balance;
+  // Allow long words (e.g. compound nouns) to break instead of overflowing.
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  hyphens: auto;
+
+  // Tablet: dial title size up slightly (clamp upper otherwise undershoots
+  // at 768-1023). Two visual lines look right at this width.
+  @include bp(md) {
+    @include bp-down(lg) {
+      font-size: clamp(3.4rem, 7vw, 4.8rem);
+    }
+  }
+
+  // Phone — tighter clamp + line-height so 2 lines fit above the stage.
+  @include bp-down(md) {
+    font-size: clamp(2rem, 9vw, 2.85rem);
+    line-height: 0.95;
+    letter-spacing: -0.035em;
+    gap: 0.02em;
+  }
+}
+
+.hero__title-line { display: block; overflow: hidden; padding-bottom: 0.05em; }
+
+.hero__word {
+  display: inline-block;
+  margin-right: 0.18em;
+  vertical-align: baseline;
+}
+
+.hero__script {
+  font-family: $font-serif;
+  font-style: italic;
+  font-weight: $fw-regular;
+  letter-spacing: -0.03em;
+  @include gradient-text($blue-700, $green-600);
+  display: inline-block;
+}
+
+// Manual char-split: each letter is masked and slides up
+.hero__char {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: baseline;
+  line-height: 1.05;
+}
+.hero__char-inner {
+  display: inline-block;
+  will-change: transform;
+}
+
+// Shimmer wipe across the title on audience switch
+.hero__title { position: relative; isolation: isolate; }
+
+.hero__title-shimmer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0;
+  background: linear-gradient(
+    100deg,
+    transparent 0%,
+    transparent 35%,
+    rgba(255, 255, 255, 0.7) 50%,
+    rgba(255, 255, 255, 0.0) 65%,
+    transparent 100%
+  );
+  background-size: 220% 100%;
+  background-position: -120% 0;
+  mix-blend-mode: overlay;
+}
+
+.hero__title.is-shimmering .hero__title-shimmer {
+  animation: hero-shimmer 0.85s $ease-out-expo forwards;
+}
+
+@keyframes hero-shimmer {
+  0%   { opacity: 0; background-position: -120% 0; }
+  18%  { opacity: 1; }
+  100% { opacity: 0; background-position: 120% 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__title.is-shimmering .hero__title-shimmer { animation: none; }
+}
+
+.hero--green .hero__script { @include gradient-text($green-700, $blue-600); }
+.hero--coral .hero__script { @include gradient-text($coral-700, $blue-600); }
+.hero--ink   .hero__script { @include gradient-text($ink, $gray-500); }
+.hero--gold  .hero__script { @include gradient-text($gold-700, $coral-600); }
+
+.hero__word--mark {
+  position: relative;
+  display: inline-block;
+
+  &::after {
+    content: "";
+    position: absolute;
+    left: -2%; right: -2%;
+    bottom: 0.06em;
+    height: 0.2em;
+    background: linear-gradient(90deg, $coral-300, $coral-500, $coral-300);
+    border-radius: 999px;
+    z-index: -1;
+    opacity: 0.55;
+    animation: hero-underline 3s ease-in-out infinite;
+  }
+}
+
+.hero--green .hero__word--mark::after { background: linear-gradient(90deg, $green-300, $green-500, $green-300); }
+.hero--coral .hero__word--mark::after { background: linear-gradient(90deg, $blue-200, $blue-500, $blue-200); }
+.hero--ink   .hero__word--mark::after { background: linear-gradient(90deg, $coral-300, $coral-500, $coral-300); }
+.hero--gold  .hero__word--mark::after { background: linear-gradient(90deg, $gold-300, $gold-500, $gold-300); }
+
+@keyframes hero-underline {
+  0%, 100% { transform: scaleX(1); }
+  50%      { transform: scaleX(0.96) translateY(-1px); }
+}
+
+.hero__sub {
+  font-size: clamp(0.95rem, 1.4vw, 1.15rem);
+  color: $ink-soft;
+  max-width: 50ch;
+  line-height: 1.55;
+
+  @include bp-down(md) {
+    font-size: 0.95rem;
+    line-height: 1.45;
+    // Show only first 2 lines on phone to save vertical space.
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+
+.hero__ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-3;
+  align-items: center;
+  margin-top: $space-1;
+
+  // Phone — stack as 2 full-width buttons. The phone-cta is replaced by the
+  // sticky bottom CTA bar so we hide it inline here to save vertical space.
+  @include bp-down(md) {
+    flex-direction: column;
+    align-items: stretch;
+    gap: $space-2;
+
+    .button { width: 100%; justify-content: center; }
+    .hero__phone-cta { display: none; }
+  }
+}
+
+.hero__phone-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-2;
+  padding: 0.5rem 0.95rem;
+  background: $white;
+  border: 1.5px solid $gray-200;
+  border-radius: $radius-full;
+  text-decoration: none;
+  color: $ink;
+  font-family: $font-display;
+  font-weight: $fw-bold;
+  font-size: 0.92rem;
+  min-height: 44px;
+  transition: all $duration-fast $ease-soft;
+
+  span { display: inline-flex; flex-direction: column; line-height: 1.05; }
+  em {
+    font-style: normal;
+    font-size: 0.62rem;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    font-weight: $fw-bold;
+    color: $green-700;
+  }
+
+  svg { color: $blue-700; }
+
+  &:hover { border-color: $blue-300; transform: translateY(-1px); box-shadow: $shadow-sm; }
+}
+
+.hero__phone-pulse {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: $green-500;
+  box-shadow: 0 0 0 4px rgba($green-500, 0.18);
+  animation: pulse-soft 1.6s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+.hero__live-card {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-3;
+  padding: 0.6rem 1rem;
+  background: $white;
+  border: 1px solid $gray-100;
+  border-radius: $radius-full;
+  box-shadow: $shadow-sm;
+  align-self: flex-start;
+  margin-top: $space-2;
+  max-width: 100%;
+
+  // Phone — pin compactly under CTAs so it doesn't push the stage down.
+  @include bp-down(md) {
+    margin-top: $space-1;
+    padding: 0.45rem 0.75rem;
+    gap: $space-2;
+    align-self: stretch;
+    justify-content: flex-start;
+  }
+}
+
+.hero__live-pulse {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: $green-500;
+  box-shadow: 0 0 0 5px rgba($green-500, 0.18);
+  flex-shrink: 0;
+}
+
+.hero__live-eyebrow {
+  font-family: $font-display;
+  font-weight: $fw-bold;
+  font-size: 0.6rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: $green-700;
+}
+
+.hero__live-text {
+  font-size: 0.86rem;
+  color: $ink;
+  font-weight: $fw-medium;
+
+  @include bp-down(md) {
+    font-size: 0.78rem;
+    line-height: 1.25;
+  }
+}
+
+// =============================================
+// MEDIA — single cinematic stage + floats
+// =============================================
+.hero__media {
+  position: relative;
+  width: 100%;
+  max-width: 540px;
+  aspect-ratio: 4 / 5;
+  justify-self: center;
+
+  @include bp(lg) { justify-self: end; max-width: min(540px, 60vh); }
+
+  // Phone — show only a compact bento glimpse so hero fits within 110-115vh.
+  @include bp-down(md) {
+    aspect-ratio: 16 / 11;
+    max-width: 100%;
+    margin-top: $space-2;
+  }
+}
+
+.hero__stage {
+  --hero-px: 0px;
+  --hero-py: 0px;
+  --hero-sy: 0px;
+  --hero-sk: 1;
+  position: absolute;
+  inset: 0;
+  border-radius: $radius-2xl;
+  overflow: hidden;
+  background: $blue-50;
+  background-size: cover;
+  background-position: center;
+  box-shadow: $shadow-xl;
+  z-index: 1;
+  cursor: crosshair;
+  transform: translate3d(var(--hero-px), calc(var(--hero-py) + var(--hero-sy)), 0) scale(var(--hero-sk));
+  will-change: transform;
+
+  // Always-on poster image (so stage is never grey)
+  .hero__stage-fallback {
+    position: absolute;
+    inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    z-index: 0;
+    transform: scale(1.02);
+  }
+
+  video {
+    position: absolute;
+    inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+    z-index: 1;
+    transform: scale(1.04);
+    opacity: 0;
+    transition: opacity 0.6s ease, transform 8s ease-out;
+
+    &.is-ready { opacity: 1; transform: scale(1); }
+  }
+
+  &::after {
+    content: "";
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(180deg, rgba(15, 36, 69, 0.04) 0%, rgba(15, 36, 69, 0.5) 100%),
+      radial-gradient(circle at 50% 50%, transparent 30%, rgba(15, 36, 69, 0.15) 100%);
+    pointer-events: none;
+  }
+}
+
+.hero__stage-grain {
+  position: absolute; inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence baseFrequency='0.95' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.3'/></svg>");
+  mix-blend-mode: overlay;
+  opacity: 0.45;
+  animation: grain 0.5s steps(2) infinite;
+}
+
+@keyframes grain {
+  0%, 100% { transform: translate(0, 0); }
+  50%      { transform: translate(-2%, 2%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__stage-grain { animation: none; }
+}
+
+// Sparkle trail on stage
+.hero__spark {
+  position: absolute;
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: $coral-300;
+  box-shadow: 0 0 8px $coral-500;
+  pointer-events: none;
+  z-index: 3;
+  transform: translate(-50%, -50%);
+}
+
+.hero__stage-mute {
+  position: absolute;
+  bottom: 18px; right: 18px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: $font-display;
+  font-weight: $fw-bold;
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: $white;
+  padding: 0.28rem 0.6rem;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: $radius-full;
+  z-index: 2;
+}
+
+.hero__counter {
+  position: absolute;
+  top: 18px; right: 18px;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+  padding: 0.4rem 0.85rem;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: $radius-full;
+  color: $white;
+  z-index: 2;
+  font-family: $font-display;
+
+  strong {
+    font-weight: $fw-extra;
+    font-size: 1rem;
+    letter-spacing: -0.02em;
+  }
+  span {
+    font-weight: $fw-medium;
+    font-size: 0.78rem;
+    opacity: 0.7;
+  }
+}
+
+.hero__stage-tag {
+  position: absolute;
+  top: 18px; left: 18px;
+  font-family: $font-display;
+  font-weight: $fw-bold;
+  font-size: 0.66rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: $white;
+  padding: 0.35rem 0.7rem;
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: $radius-full;
+  z-index: 2;
+}
+
+.hero__play {
+  position: absolute;
+  bottom: 18px; left: 18px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0.5rem 0.85rem 0.5rem 0.65rem;
+  background: $white;
+  color: $coral-600;
+  border-radius: $radius-full;
+  font-family: $font-display;
+  font-weight: $fw-bold;
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  box-shadow: $shadow-md;
+  z-index: 2;
+  transition: transform $duration-base $ease-out-expo;
+
+  &:hover { transform: scale(1.05); }
+}
+
+.hero__float {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding: 0.7rem 1rem;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  border-radius: $radius-xl;
+  box-shadow: $shadow-lg;
+  z-index: 4;
+  min-width: 130px;
+}
+
+.hero__float-eyebrow {
+  font-family: $font-display;
+  font-weight: $fw-bold;
+  font-size: 0.6rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: $gray-500;
+}
+
+.hero__float-value {
+  font-family: $font-display;
+  font-weight: $fw-extra;
+  font-size: 1.3rem;
+  letter-spacing: -0.02em;
+  color: $ink;
+  line-height: 1.05;
+  margin-top: 1px;
+}
+
+.hero--blue   .hero__float-value { @include gradient-text($blue-600, $green-600); }
+.hero--green  .hero__float-value { @include gradient-text($green-700, $blue-600); }
+.hero--coral  .hero__float-value { @include gradient-text($coral-600, $blue-600); }
+.hero--ink    .hero__float-value { color: $ink; -webkit-text-fill-color: $ink; background: none; }
+.hero--gold   .hero__float-value { @include gradient-text($gold-700, $coral-600); }
+
+.hero__float-meta {
+  font-size: 0.66rem;
+  color: $gray-500;
+  margin-top: 1px;
+}
+
+.hero__float--1 { top: -3%;   left: -10%; }
+.hero__float--2 { top: 38%;   right: -12%; }
+.hero__float--3 { bottom: -5%; left: 5%; }
+
+// Below md the hero stage is narrow and floats overlap awkwardly with each
+// other and clip the viewport. Hide them; the live-card already shows social
+// proof in the textual content above.
+@include bp-down(md) {
+  .hero__float { display: none; }
+  // Strip stage chrome to keep the bento clean and uncluttered on phone.
+  .hero__counter,
+  .hero__stage-mute,
+  .hero__stage-tag,
+  .hero__play { display: none; }
+}
+
+// Tablet: keep floats visible but smaller and snugger so they don't escape
+// the viewport when the media stage is centered under the content.
+@include bp(md) {
+  @include bp-down(lg) {
+    .hero__float {
+      padding: 0.55rem 0.8rem;
+      min-width: 110px;
+    }
+    .hero__float-value { font-size: 1.1rem; }
+    .hero__float--1 { top: 2%;   left: -4%; }
+    .hero__float--2 { top: 38%;  right: -6%; }
+    .hero__float--3 { bottom: 2%; left: 6%; }
+  }
+}
+
+.hero__orbit {
+  position: absolute;
+  top: -8%;
+  right: -8%;
+  width: 140px; height: 140px;
+  z-index: 6;
+  animation: spin 22s linear infinite;
+  pointer-events: none;
+  filter: drop-shadow(0 8px 24px rgba($ink, 0.15));
+
+  @include bp-down(lg) { display: none; }
+}
+
+.hero__orbit-text {
+  font-family: $font-display;
+  font-size: 11.5px;
+  letter-spacing: 0.18em;
+  font-weight: $fw-bold;
+  fill: $ink;
+  text-transform: uppercase;
+}
+
+.hero--coral .hero__orbit-text { fill: $coral-700; }
+.hero--green .hero__orbit-text { fill: $green-700; }
+.hero--blue  .hero__orbit-text { fill: $blue-700; }
+.hero--gold  .hero__orbit-text { fill: $gold-700; }
+
+.hero__orbit-center {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: $coral-500;
+  animation: spin-rev 22s linear infinite;
+}
+
+.hero__orbit-center::before {
+  content: "";
+  position: absolute;
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  background: $white;
+  border: 1px solid $gray-100;
+  box-shadow: $shadow-md;
+  z-index: -1;
+}
+
+@keyframes spin     { from { transform: rotate(0); } to { transform: rotate(360deg); } }
+@keyframes spin-rev { from { transform: rotate(0); } to { transform: rotate(-360deg); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__orbit, .hero__orbit-center { animation: none; }
+}
+
+// =============================================
+// BOTTOM MARQUEE
+// =============================================
+.hero__bottom-marquee {
+  position: absolute;
+  bottom: 0;
+  left: 0; right: 0;
+  border-top: 1px solid rgba($gray-200, 0.7);
+  border-bottom: 1px solid rgba($gray-200, 0.7);
+  padding-block: clamp(0.6rem, 1.4vw, 1rem);
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
+  background: rgba($cream, 0.6);
+  backdrop-filter: blur(8px);
+
+  @include bp-down(lg) {
+    position: relative;
+    margin-top: 2.5rem;
+  }
+
+  // Phone — pin to bottom so it teases just past the fold.
+  @include bp-down(md) {
+    position: absolute;
+    margin-top: 0;
+    padding-block: 0.45rem;
+  }
+}
+
+.hero__marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee-loop 35s linear infinite;
+}
+
+.hero__marquee-group {
+  display: inline-flex;
+  align-items: center;
+  gap: clamp(1rem, 3vw, 2.5rem);
+  padding-right: clamp(1rem, 3vw, 2.5rem);
+  white-space: nowrap;
+
+  span {
+    font-family: $font-serif;
+    font-style: italic;
+    font-weight: $fw-regular;
+    font-size: clamp(1.05rem, 3.5vw, 2.4rem);
+    letter-spacing: -0.03em;
+    @include gradient-text($blue-700, $coral-600);
+
+    &.hero__marquee-dot {
+      font-family: inherit;
+      font-style: normal;
+      color: $coral-500;
+      -webkit-text-fill-color: $coral-500;
+      background: none;
+    }
+  }
+
+  @include bp-down(md) {
+    gap: 1rem;
+    padding-right: 1rem;
+
+    span { font-size: 0.95rem; }
+  }
+}
+
+@keyframes marquee-loop {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__marquee-track { animation: none; }
+}
