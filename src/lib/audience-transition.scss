@@ -1,0 +1,119 @@
+@use "@/styles/abstracts/variables" as *;
+@use "@/styles/abstracts/mixins" as *;
+@use "@/styles/abstracts/z-index" as *;
+
+// =============================================
+// PERSONALIZE TOAST — a small, unobtrusive confirmation that slides up when a
+// visitor personalizes the site for an audience. Pairs with a brief content
+// cross-fade (driven by `isTransitioning`) so the change is felt, not shouted.
+// =============================================
+.audience-toast {
+  position: fixed;
+  left: 50%;
+  bottom: clamp(1.25rem, 4vw, 2rem);
+  z-index: $z-toast;
+  display: flex;
+  align-items: center;
+  gap: $space-3;
+  padding: 0.7rem 1.1rem 0.7rem 0.75rem;
+  border-radius: $radius-full;
+  background: rgba($white, 0.92);
+  backdrop-filter: blur(10px);
+  border: 1px solid $gray-100;
+  box-shadow: 0 12px 34px rgba($ink, 0.16), 0 2px 8px rgba($ink, 0.08);
+  pointer-events: none; // purely informational — never traps clicks
+  overflow: hidden;
+  transform: translate(-50%, 16px);
+  animation: audience-toast 2.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+
+  // Accent — overridden per variant below.
+  --at-accent: #{$blue-600};
+
+  // Phone — lift above the mobile bottom bar.
+  @include bp-down(md) {
+    bottom: 5.25rem;
+    max-width: calc(100vw - 2rem);
+  }
+}
+
+.audience-toast--blue  { --at-accent: #{$blue-600}; }
+.audience-toast--green { --at-accent: #{$green-600}; }
+.audience-toast--coral { --at-accent: #{$coral-600}; }
+.audience-toast--ink   { --at-accent: #{$ink}; }
+.audience-toast--gold  { --at-accent: #{$gold-700}; }
+
+.audience-toast__check {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  border-radius: $radius-full;
+  color: $white;
+  background: var(--at-accent);
+}
+
+.audience-toast__text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+}
+
+.audience-toast__eyebrow {
+  font-family: $font-display;
+  font-weight: $fw-semibold;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.62rem;
+  color: $gray-500;
+}
+
+.audience-toast__title {
+  font-family: $font-display;
+  font-weight: $fw-bold;
+  font-size: 0.95rem;
+  color: $ink;
+  letter-spacing: -0.01em;
+}
+
+// Thin progress line that depletes over the toast's lifetime.
+.audience-toast__progress {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 3px;
+  width: 100%;
+  background: var(--at-accent);
+  opacity: 0.75;
+  transform-origin: left center;
+  animation: audience-toast-progress 2.6s linear forwards;
+}
+
+@keyframes audience-toast {
+  0%        { opacity: 0; transform: translate(-50%, 16px) scale(0.98); }
+  7%        { opacity: 1; transform: translate(-50%, 0) scale(1); }
+  90%       { opacity: 1; transform: translate(-50%, 0) scale(1); }
+  100%      { opacity: 0; transform: translate(-50%, 10px) scale(0.99); }
+}
+
+@keyframes audience-toast-progress {
+  0%   { transform: scaleX(1); }
+  7%   { transform: scaleX(1); }
+  100% { transform: scaleX(0); }
+}
+
+// Soft content cross-fade: the main content dips slightly then restores as the
+// audience swaps, so the refresh is felt across the page.
+#main {
+  transition: opacity 200ms $ease-soft;
+}
+body.is-personalizing #main {
+  opacity: 0.55;
+}
+
+// Reduced-motion users switch instantly (provider never renders the toast and
+// never sets the body class), but guard anyway.
+@media (prefers-reduced-motion: reduce) {
+  .audience-toast { display: none; }
+  #main { transition: none; }
+}

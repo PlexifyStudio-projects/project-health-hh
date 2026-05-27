@@ -915,6 +915,13 @@
   animation: marquee-loop 35s linear infinite;
 }
 
+// Pause the disciplines ticker while the cursor (or keyboard focus) is over it,
+// matching the trusted-by marquees.
+.hero__bottom-marquee:hover .hero__marquee-track,
+.hero__bottom-marquee:focus-within .hero__marquee-track {
+  animation-play-state: paused;
+}
+
 .hero__marquee-group {
   display: inline-flex;
   align-items: center;

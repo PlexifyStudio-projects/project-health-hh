@@ -2,6 +2,7 @@ import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { TrendingUp } from "lucide-react";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 import "./StatCounter.scss";
 
 interface Props {
@@ -37,12 +38,13 @@ function sparkline(seed: number): string {
 const RING_RADIUS = 44;
 const RING_CIRCUMFERENCE = 2 * Math.PI * RING_RADIUS;
 
-/** Convert a value to a 0..1 ring-fill ratio (cap at 86% for the editorial arc style). */
+/** Convert a value to a 0..1 ring-fill ratio. */
 function ringRatio(value: number, suffix: string): number {
-  // For percentages, use the value directly (0..100). Otherwise infer a sensible cap.
-  if (suffix.includes("%")) return Math.min(1, value / 100) * 0.86;
+  // Percentages map 1:1 to the ring so the dial reads true — 98% fills ~98%.
+  if (suffix.includes("%")) return Math.min(1, value / 100);
   if (suffix.includes("/")) return 0.86; // 24/7 always feels "complete"
-  // For "K+" or generic, scale logarithmically capped at 0.86
+  // For "K+", "+" or other non-percentage units there's no natural "100%", so we
+  // scale logarithmically and cap at 86% for the editorial arc style.
   const norm = Math.min(1, Math.log10(Math.max(1, value) + 1) / 2.2);
   return norm * 0.86;
 }
@@ -52,6 +54,12 @@ export function StatCounter({ value, suffix = "", prefix = "", label, descriptio
   const rootRef = useRef<HTMLDivElement>(null);
   const ringRef = useRef<SVGCircleElement>(null);
   const sparkPathRef = useRef<SVGPathElement>(null);
+  const reduced = useReducedMotion();
+
+  // Resting (final) ring geometry — also used as the no-JS / reduced-motion state so the
+  // dial always reads true even when the fill-up animation never runs.
+  const targetRatio = ringRatio(value, suffix);
+  const dashTarget = RING_CIRCUMFERENCE * (1 - targetRatio);
 
   useGSAP(
     () => {
@@ -61,9 +69,15 @@ export function StatCounter({ value, suffix = "", prefix = "", label, descriptio
       const spark = sparkPathRef.current;
       if (!el || !root) return;
 
+      // Reduced motion: jump straight to the final number, ring fill and sparkline.
+      if (reduced) {
+        el.textContent = String(value);
+        if (ring) gsap.set(ring, { strokeDasharray: RING_CIRCUMFERENCE, strokeDashoffset: dashTarget });
+        if (spark) gsap.set(spark, { strokeDashoffset: 0 });
+        return;
+      }
+
       const obj = { val: 0 };
-      const targetRatio = ringRatio(value, suffix);
-      const dashTarget = RING_CIRCUMFERENCE * (1 - targetRatio);
 
       // Reset displayed number to 0 (in case value changed via audience switch)
       el.textContent = "0";
@@ -128,7 +142,7 @@ export function StatCounter({ value, suffix = "", prefix = "", label, descriptio
         sparkTween?.kill();
       };
     },
-    { scope: rootRef, dependencies: [value, suffix] }
+    { scope: rootRef, dependencies: [value, suffix, reduced, dashTarget] }
   );
 
   const sparkPath = sparkline(value + index);
@@ -173,6 +187,12 @@ export function StatCounter({ value, suffix = "", prefix = "", label, descriptio
             strokeWidth="3"
             strokeLinecap="round"
             transform="rotate(-90 50 50)"
+            // Resting state: empty until the fill animation runs; pre-filled to the
+            // true ratio when motion is reduced (animation is skipped).
+            style={{
+              strokeDasharray: RING_CIRCUMFERENCE,
+              strokeDashoffset: reduced ? dashTarget : RING_CIRCUMFERENCE,
+            }}
           />
         </svg>
 

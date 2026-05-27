@@ -33,7 +33,7 @@ const KEY_TO_ID: Record<string, AudienceId> = {
 export function AudienceGrid() {
   const ref = useRef<HTMLElement>(null);
   const [hovered, setHovered] = useState<string | null>(null);
-  const { active: activeId, setActive } = useAudience();
+  const { active: activeId, personalize } = useAudience();
   const activeKey = ID_TO_KEY[activeId];
   const reduced = useReducedMotion();
 
@@ -200,7 +200,7 @@ export function AudienceGrid() {
                       <button
                         type="button"
                         className="audience-card__pick"
-                        onClick={() => setActive(KEY_TO_ID[a.key])}
+                        onClick={() => personalize(KEY_TO_ID[a.key])}
                       >
                         Personalize for me
                         <span aria-hidden="true">→</span>
